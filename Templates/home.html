@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     {% if user.hospital %}
-    <h1>Welcome co{{user.hospital.hospital|title}}</h1>
+    <h1>Welcome {{user.hospital.hospital|title}}</h1>
     {% else %}
     <h1>Welcome Mr {{user.username|title}}</h1>
     {% endif %}

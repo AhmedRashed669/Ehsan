@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="container-fluid">Patients List</h1>
+{% for patient in patient_list %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Age</th>
+        <th scope="col">Sex</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.sex }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endfor %}
+
+{% endblock %}

@@ -23,5 +23,6 @@ urlpatterns = [
     path('',views.IndexView.as_view(),name='index'),
     path('home/',views.HomeView.as_view(),name='home'),
     path('accounts/',include('accounts.urls')),
+    path('patients/',include('patients.urls')),
     
 ]

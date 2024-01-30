@@ -2,25 +2,37 @@
 {% block content %}
 
 <h1 class="container-fluid">Patients List</h1>
-{% for patient in patient_list %}
-<table class="table">
+
+<table class="table container-fluid">
     <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Age</th>
         <th scope="col">Sex</th>
+        <th scope="col">Options</th>
       </tr>
     </thead>
     <tbody>
+      {% for patient in patient_list %}
       <tr>
-        <th scope="row">1</th>
-        <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ patient.first_name }} {{patient.middle_name}} {{ patient.last_name }}</td>
         <td>{{ patient.age }}</td>
-        <td>{{ patient.sex }}</td>
+        <td>{{ patient.sex }}</td>  
+        <td>
+          {% if user.hospitalemployee %}
+          <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update</a> 
+          {% else %}
+          <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
+          <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update</a>
+          {% endif %}
+        </td>
       </tr>
+      {% endfor %}
     </tbody>
+    
   </table>
-{% endfor %}
+
 
 {% endblock %}

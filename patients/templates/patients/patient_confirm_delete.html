@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1 class="container-fluid">Deleting Patient</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete {{ patient }}</p>
+    <input class="btn btn-danger" type="submit" value="Delete">
+    <a href="{% url 'patients:patient-list' %}" class="btn btn-default">cancel</a>
+</form>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Hospital
+from django.urls import reverse
 
 # Create your models here.
 class Patient(models.Model):
@@ -18,6 +19,9 @@ class Patient(models.Model):
 
     def __str__(self) -> str:
         return "{} {} {}".format(self.first_name,self.middle_name,self.last_name)
+    
+    def get_absolute_url(self):
+        return reverse("patients:patient-list")
     
 
 class PatientCase(models.Model):

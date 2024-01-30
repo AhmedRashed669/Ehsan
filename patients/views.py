@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import (ListView,CreateView,UpdateView,DeleteView)
+from django.views.generic import (ListView,CreateView,UpdateView,DeleteView,DetailView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import *
@@ -18,9 +18,16 @@ class UpdatePatient(LoginRequiredMixin,UpdateView):
     model = Patient
     fields = '__all__'
     template_name_suffix = "_update_form"
-    success_url = reverse_lazy('patients:patient-list')
+    # success_url = reverse_lazy('patients:patient-list')
+
+    def get_success_url(self):
+        return reverse_lazy('patients:patient-detail',kwargs = {'pk' : self.object.pk})
 
 class DeletePatient(LoginRequiredMixin,DeleteView):
     model = Patient
     success_url = reverse_lazy('patients:patient-list')
     context_object_name = "patient"
+
+
+class PatientDetail(DetailView):
+    model = Patient

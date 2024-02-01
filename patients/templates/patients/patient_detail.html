@@ -6,11 +6,19 @@
     <p>Age:{{ patient.age }}</p>    
     <p>Gender: {{ patient.sex }}</p>
     <p>Phone number:{{ patient.phone_number }}</p>
+    
     {% if user.hospitalemployee %}
           <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Update</a> 
           {% else %}
           <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
           <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update</a>
     {% endif %}
+    <!-- {% if patientcase %}
+    {{ patientcase.reported_by }}
+    {% else %}
+    <p>no cases to show</p>
+    {% endif %}
+     -->
+
 </div>
 {% endblock %}

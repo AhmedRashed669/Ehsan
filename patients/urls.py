@@ -9,5 +9,7 @@ urlpatterns = [
     path('updatepatient/<int:pk>/',UpdatePatient.as_view(),name="update-patient"),
     path('deletepatient/<int:pk>/',DeletePatient.as_view(),name="delete-patient"),
     path('patientdetail/<int:pk>',PatientDetail.as_view(),name="patient-detail"),
+    path('createpatientcase/<pk>',PatientCaseCreate,name="create-case")
+
 
 ]

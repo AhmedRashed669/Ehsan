@@ -1,6 +1,7 @@
+from collections.abc import Iterable
 from django.db import models
 from accounts.models import Hospital
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 
 # Create your models here.
 class Patient(models.Model):
@@ -21,8 +22,7 @@ class Patient(models.Model):
         return "{} {} {}".format(self.first_name,self.middle_name,self.last_name)
     
     def get_absolute_url(self):
-        return reverse("patients:patient-list")
-    
+        return reverse_lazy("patients:create-case",kwargs={'pk':self.pk})
 
 class PatientCase(models.Model):
     urgent = "U"
@@ -42,3 +42,10 @@ class PatientCase(models.Model):
 
     def __str__(self) -> str:
         return str(self.patient_name)
+    
+    # def get_absolute_url(self):
+    #     return reverse("patients:patient-list")
+
+    # def set_name(self,name):
+    #     self.patient_name = name
+    #     self.save()

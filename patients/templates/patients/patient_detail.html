@@ -13,12 +13,26 @@
           <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
           <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update</a>
     {% endif %}
-    <!-- {% if patientcase %}
-    {{ patientcase.reported_by }}
+    
+    <p></p>
+    <br>
+
+    <h1>Patient Cases</h1>
+    {% if patientcase.count == 1 %}
+    {% for p in patientcase %} 
+    <p>Hospital: {{ p.reported_by }}</p>
+    <p>Diagnose:{{ p.diagnose }}</p>
+    <p>Success:{{ p.is_successful }}</p>
+    <p>Cost:{{ p.cost }}</p>
+    <p>Type:{{ p.case_type }}</p>
+    {% endfor %}
     {% else %}
-    <p>no cases to show</p>
+    {% for p in patientcase %}
+    <a href="{% url 'patients:case-detail' p.id%}">Diagnose:{{ p.diagnose|title }}<br></a>
+    {% endfor %}
     {% endif %}
-     -->
+
+    
 
 </div>
 {% endblock %}

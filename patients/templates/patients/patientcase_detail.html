@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Patient Case</h1>
+<p>Hospital: {{ patientcase.reported_by }}</p>
+<p>Diagnose: {{ patientcase.diagnose }}</p>
+<p>Success: {{ patientcase.is_successful }}</p>
+<p>Cost: {{ patientcase.cost }}</p>
+<p>Type: {{ patientcase.case_type }}</p>
+
+{% endblock %}

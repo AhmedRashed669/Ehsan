@@ -75,3 +75,11 @@ def PatientCaseCreate(request,pk):
 class PatientCaseDetail(LoginRequiredMixin,DetailView):
     model = PatientCase
     context_object_name = "patientcase"
+
+class UpdatePatientCase(LoginRequiredMixin,UpdateView):
+    model = PatientCase
+    fields = ('diagnose','cost','case_type')
+    template_name_suffix = "_update_form"
+
+    def get_success_url(self):
+        return reverse_lazy("patients:case-detail",kwargs = {'pk':self.object.pk})

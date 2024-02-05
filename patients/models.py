@@ -2,11 +2,12 @@ from collections.abc import Iterable
 from django.db import models
 from accounts.models import Hospital
 from django.urls import reverse,reverse_lazy
+from django.utils import timezone
 
 # Create your models here.
 class Patient(models.Model):
-    male = "M"
-    female = "F"
+    male = "Male"
+    female = "Female"
     Gender_choices = {
         male:"Male",
         female:"Female"
@@ -16,7 +17,8 @@ class Patient(models.Model):
     last_name = models.CharField(max_length = 256)
     phone_number = models.PositiveBigIntegerField()
     age = models.PositiveSmallIntegerField()
-    sex = models.CharField(max_length=1,choices = Gender_choices)
+    sex = models.CharField(max_length=6,choices = Gender_choices)
+    
 
     def __str__(self) -> str:
         return "{} {} {}".format(self.first_name,self.middle_name,self.last_name)
@@ -39,6 +41,7 @@ class PatientCase(models.Model):
     is_successful = models.BooleanField(default = False)
     cost = models.PositiveIntegerField()
     case_type = models.CharField(max_length=10,choices = case_type_choices)
+    created_date = models.DateTimeField(default = timezone.now)
 
     def __str__(self) -> str:
         return str(self.patient_name)

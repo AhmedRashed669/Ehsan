@@ -42,9 +42,19 @@ class PatientCase(models.Model):
     cost = models.PositiveIntegerField()
     case_type = models.CharField(max_length=10,choices = case_type_choices)
     created_date = models.DateTimeField(default = timezone.now)
+    is_approve = models.BooleanField(default = False)
 
     def __str__(self) -> str:
         return str(self.patient_name)
+    
+    def approve(self):
+        self.is_approve = True
+        self.save()
+
+    def succeeded(self):
+        self.is_successful = True
+        self.save()
+
     
     # def get_absolute_url(self):
     #     return reverse("patients:patient-list")

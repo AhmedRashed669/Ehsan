@@ -24,6 +24,7 @@
     <p>Hospital: {{ p.reported_by }}</p>
     <p>Diagnose:{{ p.diagnose }}</p>
     <p>Success:{{ p.is_successful }}</p>
+    <p>Approved: {{ p.is_approve }}</p>
     <p>Cost: {{ p.cost }} YER</p>
     <p>Type:{{ p.case_type }}</p>
     <p>Date issued: {{p.created_date|date:"D d M Y"}}</p>
@@ -35,6 +36,7 @@
     <a href="{% url 'patients:case-detail' p.id%}">Diagnose:{{ p.diagnose|title }} -- {{p.created_date|date:"D d M Y"}}<br></a>
     {% endfor %}
     {% endif %}
+    <a class="btn btn-default btn-sm" href="{% url 'patients:create-case' patient.id%}">Add new case</a>
     
 
     

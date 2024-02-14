@@ -15,7 +15,7 @@ class Patient(models.Model):
     first_name = models.CharField(max_length = 256)
     middle_name = models.CharField(max_length = 256)
     last_name = models.CharField(max_length = 256)
-    phone_number = models.PositiveBigIntegerField()
+    phone_number = models.PositiveIntegerField()
     age = models.PositiveSmallIntegerField()
     sex = models.CharField(max_length=6,choices = Gender_choices)
     
@@ -55,7 +55,11 @@ class PatientCase(models.Model):
         self.is_successful = True
         self.save()
 
-    
+    class Meta:
+        permissions = (("can_approve_cases","Set case as approved"),
+                       ("can_succeed_case","Set case as successful"),)
+        
+        ordering = ["-created_date"]
     # def get_absolute_url(self):
     #     return reverse("patients:patient-list")
 

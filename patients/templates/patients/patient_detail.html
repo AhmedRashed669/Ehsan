@@ -30,6 +30,15 @@
     <p>Date issued: {{p.created_date|date:"D d M Y"}}</p>
     <p>Time: {{p.created_date|time:"H:i A"}}</p>
     <a href="{% url 'patients:case-update' p.id %}" class="btn btn-warning btn-sm">Edit Case</a>
+
+    {% if perms.patients.can_approve_cases and p.is_approve is False %}
+    <a href="{% url 'patients:patient-detail' patient.id%}" class="btn btn-default btn-sm">{{ p.approve|default:"Approve" }}</a>
+    {% endif %}
+
+    {% if perms.patients.can_succeed_case and p.is_successful is False %}
+    <a href="{% url 'patients:patient-detail' patient.id%}" class="btn btn-default btn-sm">{{ p.succeeded|default:"Successful" }}</a>
+    {% endif %}
+
     {% endfor %}
     {% else %}
     {% for p in patientcase %}

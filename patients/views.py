@@ -59,7 +59,7 @@ class PatientDetail(LoginRequiredMixin,DetailView):
     #Patient Cases
 
 @login_required
-def PatientCaseCreate(request,pk):
+def patient_case_create(request,pk):
     patient = get_object_or_404(Patient,pk=pk)
     try:
         hospital = request.user.hospitalemployee.hospital    

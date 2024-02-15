@@ -20,5 +20,8 @@
 <a href="{% url 'patients:case-detail' patientcase.id %}" class="btn btn-default btn-sm">{{patientcase.succeeded|default:"Successful" }}</a>
 {% endif %}
 
+{% if perms.patients.delete_patientcase %}
+<a href="{% url 'patients:delete-case' patientcase.id %}" class="btn btn-default btn-sm" >Delete</a>
+{% endif %}
 </div>
 {% endblock %}

@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import (ListView,CreateView,UpdateView,DeleteView,DetailView,FormView)
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.contrib.auth import get_user
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -36,10 +36,11 @@ class UpdatePatient(LoginRequiredMixin,UpdateView):
     def get_success_url(self):
         return reverse_lazy('patients:patient-detail',kwargs = {'pk' : self.object.pk})
 
-class DeletePatient(LoginRequiredMixin,DeleteView):
+class DeletePatient(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
     model = Patient
     success_url = reverse_lazy('patients:patient-list')
     context_object_name = "patient"
+    permission_required = "patients.delete_patient"
 
 
 class PatientDetail(LoginRequiredMixin,DetailView):
@@ -104,3 +105,13 @@ class UpdatePatientCase(LoginRequiredMixin,UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("patients:case-detail",kwargs = {'pk':self.object.pk})
+    
+
+class DeletePatientCase(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
+    model = PatientCase
+    context_object_name = "patientcase"
+    permission_required = "patients.delete_patientcase"
+    
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("patients:patient-detail",kwargs = {'pk':self.object.patient_name.pk})

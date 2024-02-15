@@ -12,4 +12,5 @@ urlpatterns = [
     path('createpatientcase/<pk>',patient_case_create,name="create-case"),
     path('casedetail/<int:pk>',PatientCaseDetail.as_view(),name = "case-detail"),
     path('updatepatientcase/<int:pk>/',UpdatePatientCase.as_view(),name="case-update"),
+    path('deletepatientcase/<int:pk>/',DeletePatientCase.as_view(),name="delete-case"),
 ]

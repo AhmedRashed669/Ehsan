@@ -6,14 +6,6 @@
     <p>Age:{{ patient.age }}</p>    
     <p>Gender: {{ patient.sex }}</p>
     <p>Phone number:{{ patient.phone_number }}</p>
-    
-    <!-- {% if user.hospitalemployee %}
-           
-          {% else %}
-          <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
-          <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update Patient</a>
-          
-    {% endif %} -->
 
     {% if perms.patients.change_patient %}
     <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Edit Patient</a>
@@ -52,7 +44,7 @@
     {% endif %}
 
     {% endfor %}
-    
+
     {% else %}
     {% for p in patientcase %}
     <a href="{% url 'patients:case-detail' p.id%}">Diagnose:{{ p.diagnose|title }} -- {{p.created_date|date:"D d M Y"}}<br></a>

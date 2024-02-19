@@ -34,10 +34,17 @@ class PatientList(LoginRequiredMixin,ListView):
                 return super().get_queryset()   
         #context name will be patieint_list
             
-# def approve_case(request,pk):
-#     patient_case = get_object_or_404(PatientCase,pk = pk)
-#     patient_case.approve()
-#     return redirect()
+def approve_case(request,pk):
+    patient_case = get_object_or_404(PatientCase,pk = pk)
+    patient_case.approve()
+    patient_pk = patient_case.patient_name.id
+    return redirect("patients:patient-detail",pk = patient_pk )
+
+def succeed_case(request,pk):
+    patient_case = get_object_or_404(PatientCase,pk = pk)
+    patient_case.succeeded()
+    patient_pk = patient_case.patient_name.id
+    return redirect("patients:patient-detail",pk = patient_pk )
 
 
 

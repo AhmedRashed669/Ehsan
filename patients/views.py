@@ -2,19 +2,44 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render,get_object_or_404,redirect
-from django.views.generic import (ListView,CreateView,UpdateView,DeleteView,DetailView)
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (ListView,CreateView,UpdateView,DeleteView,DetailView,FormView)
+from django.contrib.auth.mixins import LoginRequiredMixin,PermissionRequiredMixin
 from django.contrib.auth import get_user
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .forms import PatientCaseForm
 from accounts.models import HospitalEmployee,Hospital
-from .models import *
+from patients.models import *
+
 
 # Create your views here.
 class PatientList(LoginRequiredMixin,ListView):
     model = Patient
-    #context name will be patieint_list
+
+    def get_queryset(self) -> QuerySet[Any]:
+        querySet = super().get_queryset()
+        #query for hospital employee
+        try:
+            #query for hospital employee
+            hospital = self.request.user.hospitalemployee.hospital
+            return querySet.filter(patientcase__reported_by = hospital,
+                                    patientcase__is_successful = False)
+        except:                
+            #query for system employee
+            try:
+                if self.request.user.systememployee:
+                    return querySet.filter(patientcase__is_approve = False)
+                
+            except:
+                return super().get_queryset()   
+        #context name will be patieint_list
+            
+# def approve_case(request,pk):
+#     patient_case = get_object_or_404(PatientCase,pk = pk)
+#     patient_case.approve()
+#     return redirect()
+
+
 
 
 class CreatePatient(LoginRequiredMixin,CreateView):
@@ -30,10 +55,11 @@ class UpdatePatient(LoginRequiredMixin,UpdateView):
     def get_success_url(self):
         return reverse_lazy('patients:patient-detail',kwargs = {'pk' : self.object.pk})
 
-class DeletePatient(LoginRequiredMixin,DeleteView):
+class DeletePatient(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
     model = Patient
     success_url = reverse_lazy('patients:patient-list')
     context_object_name = "patient"
+    permission_required = "patients.delete_patient"
 
 
 class PatientDetail(LoginRequiredMixin,DetailView):
@@ -53,10 +79,17 @@ class PatientDetail(LoginRequiredMixin,DetailView):
     #Patient Cases
 
 @login_required
-def PatientCaseCreate(request,pk):
+def patient_case_create(request,pk):
     patient = get_object_or_404(Patient,pk=pk)
-    hospital = request.user.hospitalemployee.hospital
-
+    try:
+        hospital = request.user.hospitalemployee.hospital    
+    except:
+        hospital = Hospital.objects.get(hospital_name = 'admin')
+        
+    # print(hospital)
+    # if not hospital:
+    # hospital = Hospital.objects.get(hospital_name = 'admin')
+    # print(hospital)
     if request.method == 'POST':
         form = PatientCaseForm(request.POST)
         if form.is_valid:
@@ -69,7 +102,15 @@ def PatientCaseCreate(request,pk):
     else:
         form = PatientCaseForm()
 
-    return render(request,'patients/patientcase_form.html',{'form':form})        
+    return render(request,'patients/patientcase_form.html',{'form':form})   
+    
+
+# class PatientCaseCreate(FormView):
+#     template_name = 'patients/patientcase_form.html'
+#     form_class =  PatientCaseForm 
+#     success_url = 'patients:patient-detail'
+    
+    
 
 
 class PatientCaseDetail(LoginRequiredMixin,DetailView):
@@ -83,3 +124,15 @@ class UpdatePatientCase(LoginRequiredMixin,UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("patients:case-detail",kwargs = {'pk':self.object.pk})
+    
+
+class DeletePatientCase(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
+    model = PatientCase
+    context_object_name = "patientcase"
+    permission_required = "patients.delete_patientcase"
+    
+
+    def get_success_url(self) -> str:
+        return reverse_lazy("patients:patient-detail",kwargs = {'pk':self.object.patient_name.pk})
+    
+

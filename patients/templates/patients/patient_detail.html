@@ -6,13 +6,13 @@
     <p>Age:{{ patient.age }}</p>    
     <p>Gender: {{ patient.sex }}</p>
     <p>Phone number:{{ patient.phone_number }}</p>
-    
-    {% if user.hospitalemployee %}
-          <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Update Patient</a> 
-          {% else %}
-          <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
-          <a href="{% url 'patients:update-patient' patient.id%}" class="btn btn-warning btn-sm">Update Patient</a>
-          
+
+    {% if perms.patients.change_patient %}
+    <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Edit Patient</a>
+    {% endif %}
+
+    {% if perms.patients.delete_patient %}
+    <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
     {% endif %}
     
     <p></p>
@@ -24,20 +24,33 @@
     <p>Hospital: {{ p.reported_by }}</p>
     <p>Diagnose:{{ p.diagnose }}</p>
     <p>Success:{{ p.is_successful }}</p>
+    <p>Approved: {{ p.is_approve }}</p>
     <p>Cost: {{ p.cost }} YER</p>
     <p>Type:{{ p.case_type }}</p>
     <p>Date issued: {{p.created_date|date:"D d M Y"}}</p>
     <p>Time: {{p.created_date|time:"H:i A"}}</p>
     <a href="{% url 'patients:case-update' p.id %}" class="btn btn-warning btn-sm">Edit Case</a>
+
+    {% if perms.patients.can_approve_cases and p.is_approve is False %}
+    <a href="{% url 'patients:patient-detail' patient.id%}" class="btn btn-default btn-sm">{{ p.approve|default:"Approve" }}</a>
+    {% endif %}
+
+    {% if perms.patients.can_succeed_case and p.is_successful is False %}
+    <a href="{% url 'patients:patient-detail' patient.id%}" class="btn btn-default btn-sm">{{ p.succeeded|default:"Successful" }}</a>
+    {% endif %}
+
+    {% if perms.patients.delete_patientcase %}
+    <a href="{% url 'patients:delete-case' p.id %}" class="btn btn-danger btn-sm" >Delete Case</a>
+    {% endif %}
+
     {% endfor %}
+
     {% else %}
     {% for p in patientcase %}
     <a href="{% url 'patients:case-detail' p.id%}">Diagnose:{{ p.diagnose|title }} -- {{p.created_date|date:"D d M Y"}}<br></a>
     {% endfor %}
     {% endif %}
+    <a class="btn btn-default btn-sm" href="{% url 'patients:create-case' patient.id%}">Add new case</a>
     
-
-    
-
 </div>
 {% endblock %}

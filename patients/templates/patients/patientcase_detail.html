@@ -5,10 +5,23 @@
 <p>Hospital: {{ patientcase.reported_by }}</p>
 <p>Diagnose: {{ patientcase.diagnose }}</p>
 <p>Success: {{ patientcase.is_successful }}</p>
+<p>Approved: {{ patientcase.is_approve }}</p>
 <p>Cost: {{ patientcase.cost }}</p>
 <p>Type: {{ patientcase.case_type }}</p>
 <p>Date issued: {{patientcase.created_date|date:"D d M Y"}}</p>
 <p>Time: {{patientcase.created_date|time:"H:i A"}}</p>
 <a href="{% url 'patients:case-update' patientcase.id %}" class="btn btn-warning btn-sm">Edit Case</a>
+
+{% if perms.patients.can_approve_cases and patientcase.is_approve is False %}
+<a href="{% url 'patients:case-detail' patientcase.id %}" class="btn btn-default btn-sm">{{patientcase.approve|default:"Approve" }}</a>
+{% endif %}
+
+{% if perms.patients.can_succeed_cases and patientcase.is_successful is False %}
+<a href="{% url 'patients:case-detail' patientcase.id %}" class="btn btn-default btn-sm">{{patientcase.succeeded|default:"Successful" }}</a>
+{% endif %}
+
+{% if perms.patients.delete_patientcase %}
+<a href="{% url 'patients:delete-case' patientcase.id %}" class="btn btn-default btn-sm" >Delete</a>
+{% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1 class="container-fluid">Deleting Patient Case</h1>
+    <div class="container-fluid">
+        <form method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete {{ patientcase|title }}'s case</p>
+            <input type="submit" class="btn btn-default" value="Delete">
+        </form>
+    </div>
+{% endblock %}

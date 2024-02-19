@@ -25,8 +25,9 @@
               <a class="nav-link" href="{% url 'patients:add-patient' %}">Add Patient</a>
               <form id="frm_logout" method="post" action="{% url 'accounts:logout' %}">     
               {% csrf_token %}     
-              <input class="nav-link" type="submit" value="logout">
+              <input class="nav-link" type="submit" value="logout"> 
               </form>
+              <a class="nav-link">{{ user.username }}</a>
             {% endif %}
             </div>
         {% endblock %}

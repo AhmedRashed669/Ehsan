@@ -13,4 +13,6 @@ urlpatterns = [
     path('casedetail/<int:pk>',PatientCaseDetail.as_view(),name = "case-detail"),
     path('updatepatientcase/<int:pk>/',UpdatePatientCase.as_view(),name="case-update"),
     path('deletepatientcase/<int:pk>/',DeletePatientCase.as_view(),name="delete-case"),
+    path("approvecase/<pk>",approve_case,name="approve_case"),
+    path("succeedcase/<pk>",succeed_case,name="succeed_case"),
 ]

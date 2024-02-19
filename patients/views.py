@@ -11,16 +11,35 @@ from .forms import PatientCaseForm
 from accounts.models import HospitalEmployee,Hospital
 from patients.models import *
 
+
 # Create your views here.
 class PatientList(LoginRequiredMixin,ListView):
     model = Patient
 
-    # def get_queryset(self) -> QuerySet[Any]:
-    #     if user.HospitalEmployee:
-    #         return Patient.objects.filter(patient_name =)
-    #     else:
+    def get_queryset(self) -> QuerySet[Any]:
+        querySet = super().get_queryset()
+        #query for hospital employee
+        try:
+            #query for hospital employee
+            hospital = self.request.user.hospitalemployee.hospital
+            return querySet.filter(patientcase__reported_by = hospital,
+                                    patientcase__is_successful = False)
+        except:                
+            #query for system employee
+            try:
+                if self.request.user.systememployee:
+                    return querySet.filter(patientcase__is_approve = False)
+                
+            except:
+                return super().get_queryset()   
+        #context name will be patieint_list
+            
+# def approve_case(request,pk):
+#     patient_case = get_object_or_404(PatientCase,pk = pk)
+#     patient_case.approve()
+#     return redirect()
 
-    #context name will be patieint_list
+
 
 
 class CreatePatient(LoginRequiredMixin,CreateView):
@@ -115,3 +134,5 @@ class DeletePatientCase(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
 
     def get_success_url(self) -> str:
         return reverse_lazy("patients:patient-detail",kwargs = {'pk':self.object.patient_name.pk})
+    
+

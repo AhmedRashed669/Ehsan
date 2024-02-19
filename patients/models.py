@@ -21,7 +21,7 @@ class Patient(models.Model):
     
 
     def __str__(self) -> str:
-        return "{} {} {}".format(self.first_name,self.middle_name,self.last_name)
+        return "{} {} {}".format(self.first_name,self.middle_name,self.last_name).title()
     
     def get_absolute_url(self):
         return reverse_lazy("patients:create-case",kwargs={'pk':self.pk})
@@ -45,7 +45,8 @@ class PatientCase(models.Model):
     is_approve = models.BooleanField(default = False)
 
     def __str__(self) -> str:
-        return str(self.patient_name)
+        return  "{}-{}".format(self.patient_name,self.diagnose).title()
+    
     
     def approve(self):
         self.is_approve = True

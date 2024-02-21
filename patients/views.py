@@ -98,7 +98,7 @@ def patient_case_create(request,pk):
     # hospital = Hospital.objects.get(hospital_name = 'admin')
     # print(hospital)
     if request.method == 'POST':
-        form = PatientCaseForm(request.POST)
+        form = PatientCaseForm(request.POST,request.FILES)
         if form.is_valid:
             patientcase = form.save(commit=False)
             patientcase.patient_name = patient

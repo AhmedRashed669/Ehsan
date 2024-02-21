@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div class="container-fluid">
     <h1>Patients Info</h1>
@@ -32,6 +33,13 @@
     <p>Type:{{ patientcase.case_type }}</p>
     <p>Date issued: {{ patientcase.created_date|date:"D d M Y" }}</p>
     <p>Time: {{patientcase.created_date|time:"H:i A"}}</p>
+    <a href="{{ patientcase.docs.url }}">
+        <img src="{% static 'pics/pngwing.com.png' %}" class="rounded" alt="PDF" width="100px" height="100px">
+    </a>
+
+    <br>
+    <br>
+    
 
     {% if patientcase.is_approve == False %}
     <a href="{% url 'patients:case-update' patientcase.id %}" class="btn btn-warning btn-sm">Edit Case</a>

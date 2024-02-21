@@ -16,6 +16,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATIC_DIR = BASE_DIR / 'static'
+MEDIA_DIR = BASE_DIR / 'media'
 
 
 # Quick-start development settings - unsuitable for production
@@ -124,6 +125,10 @@ TIME_ZONE = 'Asia/Bahrain'
 USE_I18N = True
 
 USE_TZ = True
+
+#media
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
 
 
 # Static files (CSS, JavaScript, Images)

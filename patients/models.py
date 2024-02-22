@@ -43,6 +43,7 @@ class PatientCase(models.Model):
     case_type = models.CharField(max_length=10,choices = case_type_choices)
     created_date = models.DateTimeField(default = timezone.now)
     is_approve = models.BooleanField(default = False)
+    is_accepted = models.BooleanField(default = False)
     docs =  models.FileField(upload_to='patients_docs',null=True)
 
     def __str__(self) -> str:
@@ -55,6 +56,10 @@ class PatientCase(models.Model):
 
     def succeeded(self):
         self.is_successful = True
+        self.save()
+    
+    def accepted(self):
+        self.is_accepted = True
         self.save()
 
     class Meta:

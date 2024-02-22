@@ -23,12 +23,12 @@
 
     <h1>Patient Cases</h1>
     {% if patientcase.count == 1 %}
-    {% for patientcase in patientcase %}.
-     
+    {% for patientcase in patientcase %}
     <p>Hospital: {{ patientcase.reported_by }}</p>
     <p>Diagnose:{{ patientcase.diagnose }}</p>
     <p>Success:{{ patientcase.is_successful }}</p>
     <p>Approved: {{ patientcase.is_approve }}</p>
+    <p>Accepted: {{ patientcase.is_accepted }}</p>
     <p>Cost: {{ patientcase.cost }} YER</p>
     <p>Type:{{ patientcase.case_type }}</p>
     <p>Date issued: {{ patientcase.created_date|date:"D d M Y" }}</p>
@@ -41,17 +41,21 @@
     <br>
     
 
-    {% if patientcase.is_approve == False %}
+    {% if patientcase.is_accepted == False %}
     <a href="{% url 'patients:case-update' patientcase.id %}" class="btn btn-warning btn-sm">Edit Case</a>
     {% endif %}
 
 
-    {% if perms.patients.can_approve_cases and patientcase.is_approve is False %}
-    <a href="{% url 'patients:approve_case' patientcase.id%}" class="btn btn-default btn-sm">Approve</a>
+    {% if perms.patients.can_approve_cases and patientcase.is_accepted is True and patientcase.is_approve is False %}
+    <a href="{% url 'patients:approve-case' patientcase.id%}" class="btn btn-default btn-sm">Approve</a>
+    {% endif %}
+
+    {% if patientcase.is_accepted == False and perms.patients.can_approve_cases %}
+    <a href="{% url 'patients:accept-case' patientcase.id%}" class="btn btn-default btn-sm">Accept</a>
     {% endif %}
 
     {% if perms.patients.can_succeed_case and patientcase.is_successful is False and patientcase.is_approve is True %}
-    <a href="{% url 'patients:succeed_case' patientcase.id%}" class="btn btn-default btn-sm">Successful</a>
+    <a href="{% url 'patients:succeed-case' patientcase.id%}" class="btn btn-default btn-sm">Successful</a>
     {% endif %}
 
     {% if perms.patients.delete_patientcase %}

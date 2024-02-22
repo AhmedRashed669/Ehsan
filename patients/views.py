@@ -46,6 +46,12 @@ def succeed_case(request,pk):
     patient_pk = patient_case.patient_name.id
     return redirect("patients:patient-detail",pk = patient_pk )
 
+def accept_case(request,pk):
+    patient_case = get_object_or_404(PatientCase,pk = pk)
+    patient_case.accepted()
+    patient_pk = patient_case.patient_name.id
+    return redirect("patients:patient-detail",pk = patient_pk )
+
 
 
 

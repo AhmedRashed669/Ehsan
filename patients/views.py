@@ -46,6 +46,12 @@ def succeed_case(request,pk):
     patient_pk = patient_case.patient_name.id
     return redirect("patients:patient-detail",pk = patient_pk )
 
+def accept_case(request,pk):
+    patient_case = get_object_or_404(PatientCase,pk = pk)
+    patient_case.accepted()
+    patient_pk = patient_case.patient_name.id
+    return redirect("patients:patient-detail",pk = patient_pk )
+
 
 
 
@@ -98,7 +104,7 @@ def patient_case_create(request,pk):
     # hospital = Hospital.objects.get(hospital_name = 'admin')
     # print(hospital)
     if request.method == 'POST':
-        form = PatientCaseForm(request.POST)
+        form = PatientCaseForm(request.POST,request.FILES)
         if form.is_valid:
             patientcase = form.save(commit=False)
             patientcase.patient_name = patient

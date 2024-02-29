@@ -26,6 +26,8 @@ urlpatterns = [
     path('home/',views.HomeView.as_view(),name='home'),
     path('accounts/',include('accounts.urls')),
     path('patients/',include('patients.urls')),
+    #API urls
+    path("api/patients",include("patients.api.urls"))
     
 ]
 

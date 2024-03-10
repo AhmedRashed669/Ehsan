@@ -7,6 +7,6 @@ class PatientCaseSerializer(serializers.ModelSerializer):
     reported_by = serializers.CharField(source = 'reported_by.hospital_name')
     class Meta:
         model = models.PatientCase
-        fields = ["patient_name","diagnose","cost","case_type","created_date","reported_by","docs"]
+        fields = ["patient_name","diagnose","cost","case_type","created_date","reported_by",]
 
     

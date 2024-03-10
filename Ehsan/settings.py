@@ -44,10 +44,16 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     'accounts',
     'patients',
+    'donors',
     'rest_framework',
-    
-
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+
+    
+}
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

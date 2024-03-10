@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path,include
 from . import views
 from django.conf import settings  
-from django.conf.urls.static import static  
+from django.conf.urls.static import static 
+from router import router 
 
 
 urlpatterns = [
@@ -27,7 +28,8 @@ urlpatterns = [
     path('accounts/',include('accounts.urls')),
     path('patients/',include('patients.urls')),
     #API urls
-    path("api/patients",include("patients.api.urls"))
+    # path("api/patients",include("patients.api.urls"))
+    path("api/",include(router.urls)),
     
 ]
 

@@ -1,5 +1,9 @@
 media
-patients/__pycache__
+__pycache__
 Ehsan/__pycache__
 accounts/__pycache__
-patients/migrations/__pycache__
+accounts/migrations
+patients/__pycache__
+patients/migrations/
+donors/__pycache__
+donors/migrations/

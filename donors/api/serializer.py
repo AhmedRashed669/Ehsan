@@ -7,7 +7,7 @@ class DonorSerializer(ModelSerializer):
     username = serializers.CharField(required = False)
     class Meta:
         model = Donor
-        fields = ["username","email","phone_number"]
+        fields = ["username","first_name","last_name","email","phone_number","sex"]
 
     # def create(self, validated_data):
     #     return super().create(validated_data)

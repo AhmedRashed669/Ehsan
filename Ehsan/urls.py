@@ -19,6 +19,7 @@ from . import views
 from django.conf import settings  
 from django.conf.urls.static import static 
 from router import router 
+from rest_framework.authtoken import views as tokenview
 
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
     path('patients/',include('patients.urls')),
     #API urls
     # path("api/patients",include("patients.api.urls"))
+    path('api-token-auth/', tokenview.obtain_auth_token, name='api-token-auth'),
     path("api/",include(router.urls)),
     
 ]

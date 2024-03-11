@@ -5,4 +5,4 @@ from donors.api.views import DonorViewSet
 
 router = routers.DefaultRouter()
 router.register('patientcases', PatientCaseViewSet, basename="patientcase")
-router.register('donor', DonorViewSet, basename="patientcase")
+router.register('donors', DonorViewSet, basename="donor")

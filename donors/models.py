@@ -4,6 +4,7 @@ from django.utils import timezone
 from patients.models import PatientCase
 from django.db.models.signals import post_save,pre_save
 from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 # Create your models here.
@@ -26,14 +27,6 @@ class Donor(models.Model):
 
     def __str__(self) -> str:
         return "{} {}".format(self.first_name,self.last_name).title()
-    
-# @receiver(post_save,sender = Donor)
-# def create_user(sender,instance,created,**kwargs):
-#     if created:
-#         User.objects.create(username = instance.full_name,email = instance.email)
-#         print(created)
-
-# post_save.connect(create_user,sender=Donor)
 
 
 class PatientCase_Donors(models.Model):
@@ -42,3 +35,10 @@ class PatientCase_Donors(models.Model):
     amount =  models.PositiveBigIntegerField()
     date = models.DateTimeField()
 
+@receiver(post_save, sender=Donor)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """
+    Generates token whenever a donor is created
+    """
+    if created:
+        Token.objects.create(user=instance.username)

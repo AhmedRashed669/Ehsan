@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from .serializer import DonorSerializer
-from donors.models import Donor
+from .serializer import DonorSerializer,DonationSerializer
+from donors.models import Donor,PatientCase_Donors
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny
@@ -21,3 +21,12 @@ class DonorViewSet(ModelViewSet):
         if self.action == 'create':
             self.permission_classes = [AllowAny,]
         return super().get_permissions()
+    
+class DonationsViewSet(ModelViewSet):
+    serializer_class = DonationSerializer
+    queryset =  PatientCase_Donors.objects.all()
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    http_method_names = ["get","post",]
+
+    

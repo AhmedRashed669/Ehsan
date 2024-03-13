@@ -31,9 +31,12 @@ class Donor(models.Model):
 
 class PatientCase_Donors(models.Model):
     patient_case = models.ForeignKey(PatientCase,on_delete = models.CASCADE)
-    donor = models.ForeignKey(Donor,on_delete = models.CASCADE)
+    donor = models.ForeignKey(Donor,on_delete = models.CASCADE,)
     amount =  models.PositiveBigIntegerField()
     date = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return "{}--{}".format(self.patient_case,self.donor).title()
 
 @receiver(post_save, sender=Donor)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

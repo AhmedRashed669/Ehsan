@@ -14,7 +14,8 @@ class DonorViewSet(ModelViewSet):
     
     def perform_create(self, serializer):
         email = self.request.data.get('email')
-        user = User.objects.create_user(username=email,password=email)
+        password =  self.request.data.get('password')
+        user = User.objects.create_user(username=email,password=password)
         serializer.save(username = user)
 
     def get_permissions(self):

@@ -16,14 +16,15 @@ class Donor(models.Model):
         female:"Female"
     }
     username = models.OneToOneField(User,on_delete = models.CASCADE)
-    first_name  = models.CharField()
-    last_name  = models.CharField()
+    first_name  = models.CharField(max_length = 256)
+    last_name  = models.CharField(max_length = 256)
     phone_number = models.PositiveBigIntegerField()
     email = models.EmailField()
     sex = models.CharField(max_length=6,choices = Gender_choices)
     cases = models.ManyToManyField(PatientCase,
                                    through="PatientCase_Donors",
                                    related_name="donors")
+    # pic = models.FileField()
 
     def __str__(self) -> str:
         return "{} {}".format(self.first_name,self.last_name).title()

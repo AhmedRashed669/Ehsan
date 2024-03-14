@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class Hospital(models.Model):
     hospital_name = models.CharField(max_length=256)
     location = models.CharField(blank=True,max_length=256)
-    phone_number = models.PositiveBigIntegerField()
-    bank_account = models.PositiveBigIntegerField()
+    phone_number = models.PositiveBigIntegerField(null = True)
+    bank_account = models.PositiveBigIntegerField(null = True)
 
     def __str__(self) -> str:
         return str(self.hospital_name)

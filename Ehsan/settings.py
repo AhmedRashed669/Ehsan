@@ -29,6 +29,13 @@ SECRET_KEY = 'django-insecure-*m&px=o82q4=6r@$$o&h5y)-1f^w2b898%@y0#!i+ze*lwm+@7
 DEBUG = True
 
 ALLOWED_HOSTS = []
+#Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ehsansystem669@gmail.com'
+EMAIL_HOST_PASSWORD = 'hneo byzv tqoa vdzi'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 # Application definition
@@ -47,7 +54,8 @@ INSTALLED_APPS = [
     'donors',
     'rest_framework',
     'rest_framework.authtoken',
-    'drf_spectacular'
+    'drf_spectacular',
+    'django_filters',
 ]
 
 REST_FRAMEWORK = {
@@ -55,12 +63,12 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.PageNumberPagination',
         'PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS':
-        'drf_spectacular.openapi.AutoSchema'
+        'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }   
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",
-
 }
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

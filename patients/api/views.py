@@ -16,8 +16,6 @@ from rest_framework.authentication import TokenAuthentication
 class PatientCaseViewSet(ModelViewSet):
     serializer_class = serializer.PatientCaseSerializer
     queryset = PatientCase.objects.filter(is_accepted = True)
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
     http_method_names = ["get",]
     # pagination_class = "PageNumberPagination"
     

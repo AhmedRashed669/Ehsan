@@ -1,23 +1,27 @@
-from rest_framework.generics import (ListAPIView,)
 from . import serializer
-from patients.models import PatientCase,Patient
+from patients.models import PatientCase
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.filters import SearchFilter
+from django_filters import rest_framework as filters
+
+# class CaseTypeFilter(filters.FilterSet):
+#     """
+#     A custom filter to filter based on case type
+#     no need for this shit it can be implemented in search field
+#     """
+#     case_type = filters.CharFilter(lookup_expr='iexact')
+
+#     class Meta:
+#         model = PatientCase
+#         fields = ['case_type']
 
 
-# class PatientCaseList(ListAPIView):
-#     serializer_class = serializer.PatientCaseSerializer
-
-#     def get_queryset(self):
-#         patientlist = PatientCase.objects.filter(is_accepted = True)
-#         return patientlist
-    
 class PatientCaseViewSet(ModelViewSet):
     serializer_class = serializer.PatientCaseSerializer
     queryset = PatientCase.objects.filter(is_accepted = True)
     http_method_names = ["get",]
+    search_fields = ['patient_name__first_name','=diagnose',"=case_type"]
+    filter_backends = [SearchFilter]
+    # filter_backends = [SearchFilter,filters.DjangoFilterBackend]
+    # filterset_class = CaseTypeFilter
     # pagination_class = "PageNumberPagination"
-    
-
-    

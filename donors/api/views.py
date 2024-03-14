@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.decorators import action
+from django.core.mail import send_mail
 
 class DonorViewSet(ModelViewSet):
     serializer_class = DonorSerializer
@@ -16,6 +17,14 @@ class DonorViewSet(ModelViewSet):
         email = self.request.data.get('email')
         password =  self.request.data.get('password')
         user = User.objects.create_user(username=email,password=password)
+        send_mail(
+            "Donor creation",
+            "Thank you for creating an account",
+            "settings.EMAIL_HOST_USER",
+            [email],
+            fail_silently=False,
+        )
+
         serializer.save(username = user)
 
     def get_permissions(self):

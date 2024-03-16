@@ -23,7 +23,11 @@ class Donor(models.Model):
     sex = models.CharField(max_length=6,choices = Gender_choices)
     cases = models.ManyToManyField(PatientCase,
                                    through="PatientCase_Donors",
-                                   related_name="donors")
+                                   related_name="donors",
+                                   blank=True)
+    watch_later = models.ManyToManyField(PatientCase,
+                                         related_name="watched_by",
+                                         blank=True)
     # pic = models.FileField()
 
     def __str__(self) -> str:

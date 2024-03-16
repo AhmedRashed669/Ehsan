@@ -11,6 +11,7 @@ class DonationSerializer(ModelSerializer):
 
 class DonorSerializer(ModelSerializer):
     username = serializers.CharField(required = False)
+    # watch_later = serializers.StringRelatedField(many = True,read_only = True)
     # cases = serializers.StringRelatedField(many=True)
     cases = DonationSerializer(source ='patientcase_donors_set', many = True, read_only=True)
     class Meta:

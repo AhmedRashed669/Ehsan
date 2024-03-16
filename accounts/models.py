@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import Group 
 
 # Create your models here.
 class Hospital(models.Model):
@@ -26,6 +29,19 @@ class SystemEmployee(models.Model):
     def __str__(self) -> str:
         return str(self.employee_name)
     
+@receiver(post_save,sender = SystemEmployee)
+def add_sys_group(sender, instance=None, created=False, **kwargs):
+    group = Group.objects.get(name = "System employee")
+    if created:
+        group.user_set.add(instance.employee_name)
+
+@receiver(post_save,sender = HospitalEmployee)
+def add_sys_group(sender, instance=None, created=False, **kwargs):
+    group = Group.objects.get(name = "Hospital employee")
+    if created:
+        group.user_set.add(instance.name)
+
+
 
 
 

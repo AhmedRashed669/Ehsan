@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +59,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'django_filters',
+    'fcm_django',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -66,6 +71,10 @@ REST_FRAMEWORK = {
         'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }   
+
+#Firebase config
+cred = credentials.Certificate("D:\Ehsan\ehsan-d211b-firebase-adminsdk-slger-a74a28fea6.json")
+firebase_admin.initialize_app(cred)
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",
@@ -82,7 +91,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'Ehsan.urls'
 

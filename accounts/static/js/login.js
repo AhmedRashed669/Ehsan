@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging.js";
+import {getMessaging, getToken,} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,12 +18,41 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
+function requestPermission() {
+  console.log('Requesting permission...');
+  Notification.requestPermission().then((permission) => {
+    if (permission === 'granted') {
+      getToken(messaging, {
+        vapidKey:
+          "BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            // ...
+            console.log(currentToken);
+          } else {
+            // Show permission request UI
+            console.log(
+              "No registration token available. Request permission to generate one."
+            );
+            // ...
+          }
+        })
+        .catch((err) => {
+          console.log("An error occurred while retrieving token. ", err);
+          // ...
+        });
+    }
+  })
+};
+
+requestPermission();
 
 const sendData = () => {
   // Get the username and password from the form
   const usernameField = document.querySelector("#id_username");
   const passwordField = document.querySelector("#id_password");
-
 
   axios
     .post(
@@ -43,21 +72,8 @@ const sendData = () => {
     .then((response) => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
-        getToken(messaging, { vapidKey: 'BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc' }).then((currentToken) => {
-          if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            // ...
-            console.log(currentToken);
-          } else {
-            // Show permission request UI
-            console.log('No registration token available. Request permission to generate one.');
-            // ...
-          }
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
-          // ...
-        });      } 
-        else {
+        requestPermission();
+      } else {
         // Set the fields to null
         usernameField.value = "";
         passwordField.value = "";
@@ -66,9 +82,9 @@ const sendData = () => {
     });
 };
 
-
-
-const signbutton = document.querySelector("#sign").addEventListener('click',sendData);
+const signbutton = document
+  .querySelector("#sign")
+  .addEventListener("click", sendData);
 
 // const sendBtn = document.getElementById('sign');
 

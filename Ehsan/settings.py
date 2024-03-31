@@ -72,9 +72,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }   
 
-#Firebase config
-cred = credentials.Certificate("D:\Ehsan\ehsan-d211b-firebase-adminsdk-slger-a74a28fea6.json")
-firebase_admin.initialize_app(cred)
+# #Firebase config
+firebase_admin.initialize_app()
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",

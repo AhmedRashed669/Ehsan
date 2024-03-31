@@ -25,6 +25,7 @@ class CustomLoginView(LoginView):
             print("Received data: ", form.cleaned_data)  # Print received data
             response_data = {'message': True}
             print("Response data: ", response_data)  # Print response data
+            login(self.request,user)
             return JsonResponse(response_data)    
         else:
             response_data = {'message': False}

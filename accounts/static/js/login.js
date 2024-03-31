@@ -17,20 +17,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
-getToken(messaging, { vapidKey: 'BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc' }).then((currentToken) => {
-  if (currentToken) {
-    // Send the token to your server and update the UI if necessary
-    // ...
-    console.log(currentToken);
-  } else {
-    // Show permission request UI
-    console.log('No registration token available. Request permission to generate one.');
-    // ...
-  }
-}).catch((err) => {
-  console.log('An error occurred while retrieving token. ', err);
-  // ...
-});
+
 
 const sendData = () => {
   // Get the username and password from the form
@@ -56,8 +43,21 @@ const sendData = () => {
     .then((response) => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
-        window.location.replace("http://www.w3schools.com");
-      } else {
+        getToken(messaging, { vapidKey: 'BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc' }).then((currentToken) => {
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            // ...
+            console.log(currentToken);
+          } else {
+            // Show permission request UI
+            console.log('No registration token available. Request permission to generate one.');
+            // ...
+          }
+        }).catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+          // ...
+        });      } 
+        else {
         // Set the fields to null
         usernameField.value = "";
         passwordField.value = "";

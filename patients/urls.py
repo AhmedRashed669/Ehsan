@@ -16,4 +16,4 @@ urlpatterns = [
     path("approvecase/<pk>",approve_case,name="approve-case"),
     path("succeedcase/<pk>",succeed_case,name="succeed-case"),
     path("acceptcase/<pk>",accept_case,name="accept-case"),
-]
+]   

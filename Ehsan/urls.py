@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from router import router 
 from rest_framework.authtoken import views as tokenview
 from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
+from django.views.generic import TemplateView
 
 
 urlpatterns = [
@@ -35,6 +36,13 @@ urlpatterns = [
     path("api/",include(router.urls)),
     path("api/schema/",SpectacularAPIView.as_view(),name="schema"),
     path("api/schema/docs/",SpectacularSwaggerView.as_view(url_name = "schema")),
+    path("firebase-messaging-sw.js",
+        TemplateView.as_view(
+            template_name="firebase-messaging-sw.js",
+            content_type="application/javascript",
+        ),
+        name="firebase-messaging-sw.js"
+    ),
     
     
 ]

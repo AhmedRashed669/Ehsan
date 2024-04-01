@@ -43,8 +43,8 @@ class PatientCase(models.Model):
     cost = models.PositiveIntegerField()
     case_type = models.CharField(max_length=10,choices = case_type_choices)
     created_date = models.DateTimeField(default = timezone.now)
-    is_approve = models.BooleanField(default = False,verbose_name = "Approve")
-    is_accepted = models.BooleanField(default = False,verbose_name = "Accept")
+    is_approve = models.BooleanField(default = False,verbose_name = "Approve") #work on it
+    is_accepted = models.BooleanField(default = False,verbose_name = "Accept") #validated
     docs =  models.FileField(upload_to='patients_docs',null=True)
 
     def __str__(self) -> str:

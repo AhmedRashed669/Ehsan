@@ -47,8 +47,6 @@ function requestPermission() {
   })
 };
 
-requestPermission();
-
 const sendData = () => {
   // Get the username and password from the form
   const usernameField = document.querySelector("#id_username");
@@ -73,6 +71,8 @@ const sendData = () => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
         requestPermission();
+        window.location.replace("http://127.0.0.1:8000/patients/")
+        
       } else {
         // Set the fields to null
         usernameField.value = "";

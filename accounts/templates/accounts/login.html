@@ -2,9 +2,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block links %}
-<script>
-    var CSRF_TOKEN = '{{csrf_token}}'
-</script>
 <div class="container">
 <h1>Please Sign in</h1>
 <form method="post" onsubmit="event.preventDefault();">

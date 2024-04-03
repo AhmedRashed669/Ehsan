@@ -1,6 +1,27 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import {getMessaging, getToken,} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging.js";
+import {
+  getMessaging,
+  getToken,
+} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging.js";
+
+// a function to get the csrf token for the post request of send token function
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,35 +39,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
-function requestPermission() {
-  console.log('Requesting permission...');
-  Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      getToken(messaging, {
-        vapidKey:
-          "BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc",
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            // ...
-            console.log(currentToken);
-          } else {
-            // Show permission request UI
-            console.log(
-              "No registration token available. Request permission to generate one."
-            );
-            // ...
-          }
-        })
-        .catch((err) => {
-          console.log("An error occurred while retrieving token. ", err);
-          // ...
-        });
-    }
-  })
-};
-
+//sending data to login view in django
 const sendData = () => {
   // Get the username and password from the form
   const usernameField = document.querySelector("#id_username");
@@ -63,7 +56,7 @@ const sendData = () => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded", // Change the Content-Type
-          "X-CSRFTOKEN": CSRF_TOKEN,
+          "X-CSRFTOKEN": csrftoken,
         },
       }
     )
@@ -71,8 +64,7 @@ const sendData = () => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
         requestPermission();
-        window.location.replace("http://127.0.0.1:8000/patients/")
-        
+        window.location.replace("http://127.0.0.1:8000/patients/");
       } else {
         // Set the fields to null
         usernameField.value = "";
@@ -81,6 +73,59 @@ const sendData = () => {
       }
     });
 };
+
+//Requesting access for notifications
+function requestPermission() {
+  console.log("Requesting permission...");
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      getToken(messaging, {
+        vapidKey:
+          "BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc",
+      })
+        .then((currentToken) => {
+          if (currentToken) {
+            // Send the token to your server and update the UI if necessary
+            // ...
+            sendToken(currentToken);
+            console.log(currentToken);
+          } else {
+            // Show permission request UI
+            console.log(
+              "No registration token available. Request permission to generate one."
+            );
+            // ...
+          }
+        })
+        .catch((err) => {
+          console.log("An error occurred while retrieving token. ", err);
+          // ...
+        });
+    }
+  });
+}
+
+//sending token to the server  
+const sendToken = (currentToken) => {
+  const csrftoken = getCookie('csrftoken');
+  
+  axios({
+    method: 'post',
+    url: 'http://127.0.0.1:8000/api/devices/',
+    headers: {'X-CSRFToken': csrftoken},
+    data: {
+      'registration_id': currentToken,
+      'type': 'web'
+    }
+  })
+  .then(function (response) {
+    console.log(response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
+
 
 const signbutton = document
   .querySelector("#sign")

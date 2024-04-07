@@ -44,6 +44,7 @@ const sendData = () => {
   // Get the username and password from the form
   const usernameField = document.querySelector("#id_username");
   const passwordField = document.querySelector("#id_password");
+  const csrftoken = getCookie('csrftoken');
 
   axios
     .post(

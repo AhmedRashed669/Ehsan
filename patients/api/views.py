@@ -18,7 +18,7 @@ from django_filters import rest_framework as filters
 
 class PatientCaseViewSet(ModelViewSet):
     serializer_class = serializer.PatientCaseSerializer
-    queryset = PatientCase.objects.filter(is_accepted = True)
+    queryset = PatientCase.objects.filter(is_accepted = True,is_approve = False)
     http_method_names = ["get",]
     search_fields = ['patient_name__first_name','=diagnose',"=case_type"]
     filter_backends = [SearchFilter]

@@ -1,7 +1,13 @@
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from accounts.models import Hospital
 from django.urls import reverse,reverse_lazy
 from django.utils import timezone
+from .fcm import send_message
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
+
 
 
 # Create your models here.
@@ -71,3 +77,8 @@ class PatientCase(models.Model):
     # def get_absolute_url(self):
     #     return reverse("patients:patient-list")
 
+# @receiver(post_save, sender = PatientCase)
+# def notify_hospital_accept(sender, instance = None, created = False, **kwargs):
+#     if created:
+#         device = FCMDevice.objects.all().first()
+#         device.send_message(Message(notification=Notification(title='title', body='message')))

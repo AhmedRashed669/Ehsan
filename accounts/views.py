@@ -1,11 +1,9 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
-from django.contrib.auth.views import LoginView
-from django.contrib.auth import login,authenticate
-from .models import HospitalEmployee
-from django.views.decorators.csrf import csrf_exempt
-import json
+from django.http import JsonResponse
+from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth import login
+from django.contrib.auth.signals import user_logged_out
+from django.dispatch import receiver
+from fcm_django.models import FCMDevice
 
 # Create your views here.
 
@@ -27,6 +25,20 @@ class CustomLoginView(LoginView):
             response_data = {'message': False}
             print("Response data: ", response_data)  # Print response data
             return JsonResponse(response_data)
+
+@receiver(user_logged_out)
+def delete_token(sender, user, request, **kwargs):
+    try:
+        FCMDevice.objects.get(user = user).delete()
+    except:
+        print("No Token Found")
+
+
+
+
+
+
+
 
 # @csrf_exempt
 # def test(request):

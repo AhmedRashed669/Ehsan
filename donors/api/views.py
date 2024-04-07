@@ -12,7 +12,7 @@ class DonorViewSet(ModelViewSet):
     queryset = Donor.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    
+    #performs actions before saving to the db
     def perform_create(self, serializer):
         email = self.request.data.get('email')
         password =  self.request.data.get('password')

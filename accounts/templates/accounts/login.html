@@ -1,12 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block links %}
 <div class="container">
 <h1>Please Sign in</h1>
-<form method="post">
+<form method="post" onsubmit="event.preventDefault();">
     {% csrf_token %}
     {{ form|crispy }}
-    <input type="submit" class="btn btn-default" value="Login">
+    <input type="submit" class="btn btn-default" id="sign" value="Login">
 </form>
 </div>
+<script type="module" src="{% static 'js/login.js' %}"></script>
 {% endblock %}

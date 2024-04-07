@@ -10,7 +10,10 @@ from django.contrib.auth.decorators import login_required
 from .forms import PatientCaseForm
 from accounts.models import HospitalEmployee,Hospital
 from patients.models import *
-
+from firebase_admin.messaging import Message,Notification
+from fcm_django.models import FCMDevice
+from .fcm import send_message
+import threading
 
 # Create your views here.
 class PatientList(LoginRequiredMixin,ListView):
@@ -47,12 +50,14 @@ def succeed_case(request,pk):
     return redirect("patients:patient-detail",pk = patient_pk )
 
 def accept_case(request,pk):
+    # thread = threading.Thread(target=send_message)
+    # thread.start()
+    send_message()
     patient_case = get_object_or_404(PatientCase,pk = pk)
     patient_case.accepted()
-    patient_pk = patient_case.patient_name.id
+    patient_pk = patient_case.patient_name.id 
+    # return redirect("patients:patient-detail",pk = patient_pk )
     return redirect("patients:patient-detail",pk = patient_pk )
-
-
 
 
 class CreatePatient(LoginRequiredMixin,CreateView):
@@ -91,31 +96,31 @@ class PatientDetail(LoginRequiredMixin,DetailView):
 
     #Patient Cases
 
-@login_required
-def patient_case_create(request,pk):
-    patient = get_object_or_404(Patient,pk=pk)
-    try:
-        hospital = request.user.hospitalemployee.hospital    
-    except:
-        hospital = Hospital.objects.get(hospital_name = 'admin')
+# @login_required
+# def patient_case_create(request,pk):
+#     patient = get_object_or_404(Patient,pk=pk)
+#     try:
+#         hospital = request.user.hospitalemployee.hospital    
+#     except:
+#         hospital = Hospital.objects.get(hospital_name = 'admin')
         
-    # print(hospital)
-    # if not hospital:
-    # hospital = Hospital.objects.get(hospital_name = 'admin')
-    # print(hospital)
-    if request.method == 'POST':
-        form = PatientCaseForm(request.POST,request.FILES)
-        if form.is_valid:
-            patientcase = form.save(commit=False)
-            patientcase.patient_name = patient
-            patientcase.reported_by = hospital
-            patientcase.save()  
-            return redirect('patients:patient-detail',pk=patient.pk)
+#     # print(hospital)
+#     # if not hospital:
+#     # hospital = Hospital.objects.get(hospital_name = 'admin')
+#     # print(hospital)
+#     if request.method == 'POST':
+#         form = PatientCaseForm(request.POST,request.FILES)
+#         if form.is_valid:
+#             patientcase = form.save(commit=False)
+#             patientcase.patient_name = patient
+#             patientcase.reported_by = hospital
+#             patientcase.save()  
+#             return redirect('patients:patient-detail',pk=patient.pk)
         
-    else:
-        form = PatientCaseForm()
+#     else:
+#         form = PatientCaseForm()
 
-    return render(request,'patients/patientcase_form.html',{'form':form})   
+#     return render(request,'patients/patientcase_form.html',{'form':form})   
     
 
 # class PatientCaseCreate(FormView):
@@ -123,7 +128,25 @@ def patient_case_create(request,pk):
 #     form_class =  PatientCaseForm 
 #     success_url = 'patients:patient-detail'
     
-    
+class PatientCaseCreate(LoginRequiredMixin,CreateView):
+    model = PatientCase
+    form_class = PatientCaseForm
+    template_name = 'patients/patientcase_form.html'
+
+    def form_valid(self, form):
+        patient = get_object_or_404(Patient, pk=self.kwargs['pk'])
+        try:
+            hospital = self.request.user.hospitalemployee.hospital    
+        except:
+            hospital = Hospital.objects.get(hospital_name = 'admin')
+
+        patientcase = form.save(commit=False)
+        patientcase.patient_name = patient
+        patientcase.reported_by = hospital
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('patients:patient-detail', kwargs={'pk': self.object.patient_name.pk})
 
 
 class PatientCaseDetail(LoginRequiredMixin,DetailView):

@@ -9,7 +9,12 @@ importScripts('https://www.gstatic.com/firebasejs/9.14.0/firebase-messaging-comp
 // messagingSenderId.
 firebase.initializeApp({
   // Replace messagingSenderId with yours
-  'messagingSenderId': '221541812002'
+  apiKey: "AIzaSyAcbwVFge8wF_lvzP6cfiVsvZIy9AiZNEI",
+  authDomain: "ehsan-d211b.firebaseapp.com",
+  projectId: "ehsan-d211b",
+  storageBucket: "ehsan-d211b.appspot.com",
+  messagingSenderId: "221541812002",
+  appId: "1:221541812002:web:1c9b656bce39778220877b",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background

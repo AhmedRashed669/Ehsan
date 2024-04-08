@@ -32,7 +32,7 @@ urlpatterns = [
     path('patients/',include('patients.urls')),
     #API urls
     # path("api/patients",include("patients.api.urls"))
-    path('api-token-auth/', tokenview.obtain_auth_token, name='api-token-auth'),
+    path('api-token-auth/', views.CustomAuthToken.as_view(), name='api-token-auth'),
     path("api/",include(router.urls)),
     path("api/schema/",SpectacularAPIView.as_view(),name="schema"),
     path("api/schema/docs/",SpectacularSwaggerView.as_view(url_name = "schema")),

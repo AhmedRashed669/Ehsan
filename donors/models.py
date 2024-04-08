@@ -16,8 +16,7 @@ class Donor(models.Model):
         female:"Female"
     }
     username = models.OneToOneField(User,on_delete = models.CASCADE)
-    first_name  = models.CharField(max_length = 256)
-    last_name  = models.CharField(max_length = 256)
+    full_name  = models.CharField(max_length = 256)
     phone_number = models.PositiveBigIntegerField()
     email = models.EmailField()
     sex = models.CharField(max_length=6,choices = Gender_choices)
@@ -31,7 +30,7 @@ class Donor(models.Model):
     # pic = models.FileField()
 
     def __str__(self) -> str:
-        return "{} {}".format(self.first_name,self.last_name).title()
+        return self.full_name.title()
 
 
 class PatientCase_Donors(models.Model):
@@ -42,6 +41,16 @@ class PatientCase_Donors(models.Model):
 
     def __str__(self) -> str:
         return "{}--{}".format(self.patient_case,self.donor).title()
+    
+
+class GeneralDonations(models.Model):
+    donor = models.ForeignKey(Donor,on_delete = models.CASCADE)
+    amount =  models.BigIntegerField()
+    donation_date = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return "{}".format(self.donor).title()
+
 
 @receiver(post_save, sender=Donor)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

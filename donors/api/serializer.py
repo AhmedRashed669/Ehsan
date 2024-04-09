@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from donors.models import Donor,PatientCase_Donors
+from donors.models import Donor,PatientCase_Donors,GeneralDonations
 from django.contrib.auth.models import User
 
 
@@ -20,5 +20,10 @@ class DonorSerializer(ModelSerializer):
 
     # def create(self, validated_data):
     #     return super().create(validated_data)
+
+class GeneralDonationserializer(ModelSerializer):
+    class Meta:
+        model = GeneralDonations
+        fields = '__all__'
 
 

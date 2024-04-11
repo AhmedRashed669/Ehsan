@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load static %}
 {% block content %}
+{% load static %}
 <div class="container-fluid">
     <h1>Patients Info</h1>
     <p>Patient Name:{{ patient.first_name|title }} {{ patient.middle_name|title }} {{ patient.last_name|title }}</p>
-    <p>Age:{{ patient.age }}</p>    
+    <p>Age:{{ patient.age }}</p>
     <p>Gender: {{ patient.sex }}</p>
     <p>Phone number:{{ patient.phone_number }}</p>
 
@@ -15,10 +15,10 @@
     {% if perms.patients.delete_patient %}
     <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
     {% endif %}
-    
+
     <p></p>
     <br>
-    
+
     <!-- One cased patient -->
 
     <h1>Patient Cases</h1>
@@ -39,7 +39,7 @@
 
     <br>
     <br>
-    
+
 
     {% if patientcase.is_accepted == False %}
     <a href="{% url 'patients:case-update' patientcase.id %}" class="btn btn-warning btn-sm">Edit Case</a>
@@ -72,12 +72,12 @@
     {% for p in patientcase %}
     <a href="{% url 'patients:case-detail' p.id%}">Diagnose:{{ p.diagnose|title }} -- {{p.created_date|date:"D d M Y"}}<br></a>
 
-    {% endfor %} 
-    
+    {% endfor %}
+
     {% endif %}
     <!-- first if closing-->
-    
+
     <a class="btn btn-default btn-sm" href="{% url 'patients:create-case' patient.id%}">Add new case</a>
-    
+
 </div>
 {% endblock %}

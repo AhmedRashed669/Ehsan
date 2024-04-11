@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 <h1 class="container-fluid">Patients List</h1>
 
 <table class="table container-fluid">
@@ -19,12 +20,12 @@
         <th scope="row">{{ forloop.counter }}</th>
         <td> <a href="{% url 'patients:patient-detail' patient.id %}">{{ patient.first_name|title }} {{ patient.middle_name|title }} {{ patient.last_name|title }} </a></td>
         <td>{{ patient.age }}</td>
-        <td>{{ patient.sex }}</td>  
+        <td>{{ patient.sex }}</td>
         <td>
           {% if perms.patients.change_patient %}
           <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Update</a>
           {% endif %}
-      
+
           {% if perms.patients.delete_patient %}
           <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
           {% endif %}
@@ -47,7 +48,6 @@
       </tr>
       {% endfor %}
     </tbody>
-    
   </table>
 
 {% endblock %}

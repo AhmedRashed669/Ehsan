@@ -7,7 +7,6 @@ from fcm_django.models import FCMDevice
 
 # Create your views here.
 
-
 class CustomLoginView(LoginView):
     template_name = "accounts/login.html"
 

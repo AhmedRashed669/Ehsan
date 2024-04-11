@@ -76,35 +76,34 @@ const sendData = () => {
 };
 
 //Requesting access for notifications
-function requestPermission() {
+async function requestPermission() {
   console.log("Requesting permission...");
-  Notification.requestPermission().then((permission) => {
-    if (permission === "granted") {
-      getToken(messaging, {
+  const permission = await Notification.requestPermission();
+  if (permission === "granted") {
+    try {
+      const currentToken = await getToken(messaging, {
         vapidKey:
           "BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc",
-      })
-        .then((currentToken) => {
-          if (currentToken) {
-            // Send the token to your server and update the UI if necessary
-            // ...
-            sendToken(currentToken);
-            console.log(currentToken);
-          } else {
-            // Show permission request UI
-            console.log(
-              "No registration token available. Request permission to generate one."
-            );
-            // ...
-          }
-        })
-        .catch((err) => {
-          console.log("An error occurred while retrieving token. ", err);
-          // ...
-        });
+      });
+      if (currentToken) {
+        // Send the token to your server and update the UI if necessary
+        // ...
+        sendToken(currentToken);
+        console.log(currentToken);
+      } else {
+        // Show permission request UI
+        console.log(
+          "No registration token available. Request permission to generate one."
+        );
+        // ...
+      }
+    } catch (err) {
+      console.log("An error occurred while retrieving token. ", err);
+      // ...
     }
-  });
+  }
 }
+
 
 //sending token to the server
 const sendToken = (currentToken) => {

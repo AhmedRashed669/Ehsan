@@ -9,11 +9,17 @@ class DonationSerializer(ModelSerializer):
         model = PatientCase_Donors
         fields = "__all__"
 
+class GeneralDonationserializer(ModelSerializer):
+    class Meta:
+        model = GeneralDonations
+        fields = '__all__'
+
 class DonorSerializer(ModelSerializer):
     username = serializers.CharField(required = False)
     # watch_later = serializers.StringRelatedField(many = True,read_only = True)
     # cases = serializers.StringRelatedField(many=True)
     cases = DonationSerializer(source ='patientcase_donors_set', many = True, read_only=True)
+    general_donation = GeneralDonationserializer(source ='generaldonations_set', many = True, read_only=True)
     class Meta:
         model = Donor
         fields = "__all__"
@@ -21,9 +27,6 @@ class DonorSerializer(ModelSerializer):
     # def create(self, validated_data):
     #     return super().create(validated_data)
 
-class GeneralDonationserializer(ModelSerializer):
-    class Meta:
-        model = GeneralDonations
-        fields = '__all__'
+
 
 

@@ -47,7 +47,7 @@ class GeneralDonationViewSet(ModelViewSet):
     queryset = GeneralDonations.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    http_method_names = ['get','post']
+    http_method_names = ['post']
 
 
     

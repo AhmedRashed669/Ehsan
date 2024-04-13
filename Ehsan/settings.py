@@ -20,7 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+
 ]
+STATIC_ROOT = "/home/ehsandonorsys/Ehsan/static"
+
 
 MEDIA_DIR = BASE_DIR / 'media'
 
@@ -34,7 +37,7 @@ SECRET_KEY = 'django-insecure-*m&px=o82q4=6r@$$o&h5y)-1f^w2b898%@y0#!i+ze*lwm+@7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ehsandonorsys.pythonanywhere.com']
 #Email settings
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'ehsansystem669@gmail.com'
@@ -73,11 +76,11 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':
         'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-}   
+}
 
 # #Firebase config
-cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
+# firebase_admin.initialize_app(cred)
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",
@@ -176,7 +179,7 @@ MEDIA_URL = '/media/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

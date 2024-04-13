@@ -25,6 +25,9 @@ class CustomAuthToken(ObtainAuthToken):
             return Response({
                 'token': token.key,
                 'donor_id': donor.pk,
+                'full_name':donor.full_name,
+                'email':donor.email,
+                'phone_number':donor.phone_number
             })
         except:
                 return Response({

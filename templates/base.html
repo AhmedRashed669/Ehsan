@@ -11,7 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-messaging-compat.js"></script>
     <title>Ehsan</title>
     {% block links %}
-    
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -26,15 +26,15 @@
               <a class="nav-link" aria-current="page" href="#">Home</a>
               <a class="nav-link" href="{% url 'patients:patient-list' %}">Patients</a>
               <a class="nav-link" href="{% url 'patients:add-patient' %}">Add Patient</a>
-              <form id="frm_logout" method="post" action="{% url 'accounts:logout' %}">     
-              {% csrf_token %}     
-              <input class="nav-link" type="submit" value="logout"> 
+              <form id="frm_logout" method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <input class="nav-link" type="submit" value="logout">
               </form>
-              <a class="nav-link">{{ user.username }}</a>
+              <a class="nav-link">{{ user.username|title }}</a>
             {% endif %}
             </div>
         {% endblock %}
-            
+
           </div>
         </div>
       </nav>

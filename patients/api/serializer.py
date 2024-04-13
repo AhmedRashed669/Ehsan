@@ -14,7 +14,7 @@ class PatientCaseSerializer(serializers.ModelSerializer):
         model = patientmodel.PatientCase
         fields = ["pk","patient_name","diagnose","cost","case_type","created_date","reported_by","age","remainder_cost"]
 
-    def get_remainder_cost(self, obj):
+    def get_remainder_cost(self, obj) -> str:
         total_donation = donormodels.PatientCase_Donors.objects.filter(patient_case=obj).aggregate(total=Sum('amount'))['total']
         if total_donation is None:
             total_donation = 0

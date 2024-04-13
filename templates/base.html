@@ -30,7 +30,7 @@
               {% csrf_token %}
               <input class="nav-link" type="submit" value="logout">
               </form>
-              <a class="nav-link">{{ user.username }}</a>
+              <a class="nav-link">{{ user.username|title }}</a>
             {% endif %}
             </div>
         {% endblock %}

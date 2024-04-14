@@ -123,7 +123,7 @@ const sendData = () => {
     });
 };
 
-// sending token to the server  
+// sending token to the server
 const sendToken = (currentToken) => {
   const csrftoken = getCookie('csrftoken');
   axios({
@@ -158,8 +158,8 @@ const registerSW = async () => {
 const main = async () => {
   checkPermission()
   await requestNotificationPermission();
-  await registerSW();
-  // reg.showNotification("hello world")
+  const reg = await registerSW();
+  reg.showNotification("hello world")
 }
 main()
 
@@ -290,7 +290,7 @@ main()
 //     });
 // };
 
-// // sending token to the server  
+// // sending token to the server
 // const sendToken = (currentToken) => {
 //   const csrftoken = getCookie('csrftoken');
 //   axios({

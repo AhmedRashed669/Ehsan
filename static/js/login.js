@@ -1,20 +1,15 @@
-<<<<<<< HEAD
 // // Import the functions you need from the SDKs you need
 =======
 // on local host uncomment this
 // Import the functions you need from the SDKs you need
->>>>>>> 6424e3084afe5cd87a3216c4ba65a18d8f27285a
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
 import {
   getMessaging,
   getToken,
 } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging.js";
 
-<<<<<<< HEAD
-=======
 let currentToken = null;
 
->>>>>>> 6424e3084afe5cd87a3216c4ba65a18d8f27285a
 // a function to get the csrf token for the post request of send token function
 function getCookie(name) {
   let cookieValue = null;
@@ -31,7 +26,7 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-<<<<<<< HEAD
+
 console.log("Static is fine");
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -85,7 +80,6 @@ const requestNotificationPermission = async () => {
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
->>>>>>> 6424e3084afe5cd87a3216c4ba65a18d8f27285a
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAcbwVFge8wF_lvzP6cfiVsvZIy9AiZNEI",
@@ -125,12 +119,9 @@ const sendData = () => {
     .then((response) => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
-<<<<<<< HEAD
         requestPermission();
-=======
         console.log(currentToken);
         sendToken(currentToken);
->>>>>>> 6424e3084afe5cd87a3216c4ba65a18d8f27285a
         window.location.replace("https://ehsandonorsys.pythonanywhere.com/patients/");
       } else {
         // Set the fields to null
@@ -141,7 +132,6 @@ const sendData = () => {
     });
 };
 
-<<<<<<< HEAD
 //Requesting access for notifications
 async function requestPermission() {
   console.log("Requesting permission...");
@@ -180,13 +170,12 @@ const sendToken = (currentToken) => {
     method: 'post',
     url: 'https://ehsandonorsys.pythonanywhere.com/api/devices/',
 =======
-// sending token to the server  
+// sending token to the server
 const sendToken = (currentToken) => {
   const csrftoken = getCookie('csrftoken');
   axios({
     method: 'post',
     url: 'https://ehsandonorsys.pythonanywhere.com/api/fcmdevices/',
->>>>>>> 6424e3084afe5cd87a3216c4ba65a18d8f27285a
     headers: {'X-CSRFToken': csrftoken},
     data: {
       'registration_id': currentToken,
@@ -206,7 +195,6 @@ const signbutton = document
   .querySelector("#sign")
   .addEventListener("click", sendData);
 
-<<<<<<< HEAD
 // on local host uncomment this
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
@@ -486,7 +474,7 @@ main()
 //     });
 // };
 
-// // sending token to the server  
+// // sending token to the server
 // const sendToken = (currentToken) => {
 //   const csrftoken = getCookie('csrftoken');
 //   axios({

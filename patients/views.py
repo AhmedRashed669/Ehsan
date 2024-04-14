@@ -41,6 +41,7 @@ def approve_case(request,pk):
     patient_case = get_object_or_404(PatientCase,pk = pk)
     patient_case.approve()
     patient_pk = patient_case.patient_name.id
+
     return redirect("patients:patient-detail",pk = patient_pk )
 
 def succeed_case(request,pk):
@@ -52,7 +53,6 @@ def succeed_case(request,pk):
 def accept_case(request,pk):
     # thread = threading.Thread(target=send_message)
     # thread.start()
-    send_message()
     patient_case = get_object_or_404(PatientCase,pk = pk)
     patient_case.accepted()
     patient_pk = patient_case.patient_name.id 

@@ -7,6 +7,8 @@ from django.utils import timezone
 from .fcm import send_message
 from firebase_admin.messaging import Message, Notification
 from fcm_django.models import FCMDevice
+from .fcm import send_message
+from django.contrib.auth.models import User
 
 
 
@@ -77,8 +79,17 @@ class PatientCase(models.Model):
     # def get_absolute_url(self):
     #     return reverse("patients:patient-list")
 
-# @receiver(post_save, sender = PatientCase)
-# def notify_hospital_accept(sender, instance = None, created = False, **kwargs):
-#     if created:
-#         device = FCMDevice.objects.all().first()
-#         device.send_message(Message(notification=Notification(title='title', body='message')))
+@receiver(post_save, sender = PatientCase)
+def notify_admin_case(sender, instance = None, created = False, **kwargs):
+    if created:
+        mess = Message(
+        notification=Notification(title="title", body="text"),
+        )
+        users = User.objects.filter(systememployee__isnull=False)
+        for user in users:
+            device = FCMDevice.objects.filter(user=user)
+            device.send_message(mess)
+
+        
+
+

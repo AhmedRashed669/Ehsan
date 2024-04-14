@@ -1,5 +1,3 @@
-// // Import the functions you need from the SDKs you need
-=======
 // on local host uncomment this
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
@@ -26,12 +24,6 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-
-console.log("Static is fine");
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-=======
 
 const checkPermission = () => {
   if (!('serviceWorker' in navigator)) {
@@ -119,7 +111,6 @@ const sendData = () => {
     .then((response) => {
       console.log("Received response: ", response.data); // Print received response
       if (response.data["message"] === true) {
-        requestPermission();
         console.log(currentToken);
         sendToken(currentToken);
         window.location.replace("https://ehsandonorsys.pythonanywhere.com/patients/");
@@ -132,44 +123,6 @@ const sendData = () => {
     });
 };
 
-//Requesting access for notifications
-async function requestPermission() {
-  console.log("Requesting permission...");
-  const permission = await Notification.requestPermission();
-  if (permission === "granted") {
-    try {
-      const currentToken = await getToken(messaging, {
-        vapidKey:
-          "BKYFe1K0zc62r5PgdTtkYZySqp-yRaFU4p0g8Fsr-a9HM-WAzeoRvu2cZzeJGx-eOeqLJjyOF4GclAfeIpZyqQc",
-      });
-      if (currentToken) {
-        // Send the token to your server and update the UI if necessary
-        // ...
-        sendToken(currentToken);
-        console.log(currentToken);
-      } else {
-        // Show permission request UI
-        console.log(
-          "No registration token available. Request permission to generate one."
-        );
-        // ...
-      }
-    } catch (err) {
-      console.log("An error occurred while retrieving token. ", err);
-      // ...
-    }
-  }
-}
-
-
-//sending token to the server
-const sendToken = (currentToken) => {
-  const csrftoken = getCookie('csrftoken');
-
-  axios({
-    method: 'post',
-    url: 'https://ehsandonorsys.pythonanywhere.com/api/devices/',
-=======
 // sending token to the server
 const sendToken = (currentToken) => {
   const csrftoken = getCookie('csrftoken');
@@ -194,6 +147,21 @@ const sendToken = (currentToken) => {
 const signbutton = document
   .querySelector("#sign")
   .addEventListener("click", sendData);
+
+
+const registerSW = async () => {
+  const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  console.log("registered");
+  return registration;
+}
+
+const main = async () => {
+  checkPermission()
+  await requestNotificationPermission();
+  await registerSW();
+  // reg.showNotification("hello world")
+}
+main()
 
 // on local host uncomment this
 // Import the functions you need from the SDKs you need

@@ -19,6 +19,3 @@ class PatientCaseSerializer(serializers.ModelSerializer):
         if total_donation is None:
             total_donation = 0
         return total_donation
-
-
-

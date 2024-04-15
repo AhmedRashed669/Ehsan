@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 
 class DonationSerializer(ModelSerializer):
+    date = serializers.DateTimeField(required = False)
     class Meta:
         model = PatientCase_Donors
         fields = "__all__"

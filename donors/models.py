@@ -5,6 +5,10 @@ from patients.models import PatientCase
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.db.models import Sum
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -59,3 +63,22 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     """
     if created:
         Token.objects.create(user=instance.username)
+
+@receiver(post_save, sender=PatientCase_Donors)
+def set_case_as_approved(sender, instance=None, created=False, **kwargs):
+    if created:
+        total_donation = sender.objects.filter(patient_case=instance.patient_case).aggregate(total=Sum('amount'))['total'] or 0
+        patientcase = instance.patient_case
+        if total_donation >= patientcase.cost:
+            patientcase.approve()
+            users = User.objects.filter(hospitalemployee__isnull=False, hospitalemployee__hospital= 4)
+            devices = FCMDevice.objects.filter(user__in=users)
+            mess = Message(
+                notification=Notification(
+                    title="Case approved",
+                    body="case has been approved initiate the treatment",
+                    image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'
+                )
+            )
+            if devices.exists():
+                devices.send_message(mess)

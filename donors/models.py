@@ -41,7 +41,7 @@ class PatientCase_Donors(models.Model):
     patient_case = models.ForeignKey(PatientCase,on_delete = models.CASCADE)
     donor = models.ForeignKey(Donor,on_delete = models.CASCADE,)
     amount =  models.PositiveBigIntegerField()
-    date = models.DateTimeField(default = timezone.now)
+    donation_date = models.DateTimeField(default = timezone.now)
 
     def __str__(self) -> str:
         return "{}--{}".format(self.patient_case,self.donor).title()

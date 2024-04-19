@@ -1,5 +1,6 @@
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from .serializer import DonorSerializer,DonationSerializer,GeneralDonationserializer
+from .serializer import DonorSerializer,DonationSerializer,GeneralDonationserializer,SpecficDonorGeneralDonationsSerializer,SpecficDonorCaseDonationsSerializer
 from donors.models import Donor,PatientCase_Donors,GeneralDonations
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
@@ -32,6 +33,20 @@ class DonorViewSet(ModelViewSet):
         if self.action == 'create':
             self.permission_classes = [AllowAny,]
         return super().get_permissions()
+    
+    @action(detail=True,methods=['get'])
+    def get_general_donations(self,request,pk = None):
+        donations = GeneralDonations.objects.filter(donor = pk)
+        serializer =  SpecficDonorGeneralDonationsSerializer(donations,many = True)
+        return Response(serializer.data)
+    
+    @action(detail=True,methods=['get'])
+    def get_case_donations(self,request,pk = None):
+        donations = PatientCase_Donors.objects.filter(donor = pk)
+        serializer =  SpecficDonorCaseDonationsSerializer(donations,many = True)
+        return Response(serializer.data)
+        
+        
 
     
 class DonationsViewSet(ModelViewSet):
@@ -39,7 +54,7 @@ class DonationsViewSet(ModelViewSet):
     queryset =  PatientCase_Donors.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    http_method_names = ["get","post",]
+    http_method_names = ["post",]
 
 
 class GeneralDonationViewSet(ModelViewSet):

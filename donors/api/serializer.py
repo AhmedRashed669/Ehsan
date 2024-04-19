@@ -2,7 +2,24 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from donors.models import Donor,PatientCase_Donors,GeneralDonations
 from django.contrib.auth.models import User
+from patients.models import PatientCase
 
+class SimpleCaseSerializer(ModelSerializer):
+    class Meta:
+        model = PatientCase
+        fields = ['diagnose']
+
+class SpecficDonorCaseDonationsSerializer(ModelSerializer):
+    patient_case = SimpleCaseSerializer(read_only=True)
+    class Meta:
+        model = PatientCase_Donors
+        fields = ['patient_case','amount','donation_date']
+
+
+class SpecficDonorGeneralDonationsSerializer(ModelSerializer):
+    class Meta:
+        model = GeneralDonations
+        fields = ['amount','donation_date']
 
 class DonationSerializer(ModelSerializer):
     date = serializers.DateTimeField(required = False)

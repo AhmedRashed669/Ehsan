@@ -1,0 +1,24 @@
+.main-flex{
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    margin-top: 50px;
+}
+
+.main-flex a{
+    margin-left: 10px;
+}
+
+.small{
+    width: 400px;
+    height: 400px;
+}
+
+p{
+    font-size: large;
+    font-weight: bolder;
+}
+
+.pdf{
+    margin: 10px;
+}

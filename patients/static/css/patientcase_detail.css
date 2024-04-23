@@ -1,0 +1,19 @@
+.main{
+    display: flex;
+    justify-content: space-between;
+}
+
+.small{
+    width: 500px;
+    height: 500px;
+    margin-right: 25%;
+    margin-top: 100px;
+}
+p{
+    font-size: large;
+    font-weight: bolder;
+}
+
+.pdf{
+    margin: 10px;
+}

@@ -36,6 +36,15 @@ class PatientList(LoginRequiredMixin,ListView):
             except:
                 return super().get_queryset()   
         #context name will be patieint_list
+
+class PatientHistory(LoginRequiredMixin,ListView):
+    model = Patient
+    template_name_suffix = 'history_list'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        queryset = super().get_queryset()
+        return queryset.filter(patientcase__is_successful = True)
+
             
 def approve_case(request,pk):
     patient_case = get_object_or_404(PatientCase,pk = pk)
@@ -82,12 +91,6 @@ class DeletePatient(LoginRequiredMixin,PermissionRequiredMixin,DeleteView):
 
 class PatientDetail(LoginRequiredMixin,DetailView):
     model = Patient
-    #still figuring it out
-    # def get_queryset(self) -> QuerySet[Any]:
-    #     query = super().get_queryset()
-    #     query = PatientCase.objects.get(patient_name_id = self.kwargs['pk'])
-    #     return query
-    #working
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         query = PatientCase.objects.filter(patient_name_id = self.kwargs['pk'])
@@ -95,38 +98,6 @@ class PatientDetail(LoginRequiredMixin,DetailView):
         return context
 
     #Patient Cases
-
-# @login_required
-# def patient_case_create(request,pk):
-#     patient = get_object_or_404(Patient,pk=pk)
-#     try:
-#         hospital = request.user.hospitalemployee.hospital    
-#     except:
-#         hospital = Hospital.objects.get(hospital_name = 'admin')
-        
-#     # print(hospital)
-#     # if not hospital:
-#     # hospital = Hospital.objects.get(hospital_name = 'admin')
-#     # print(hospital)
-#     if request.method == 'POST':
-#         form = PatientCaseForm(request.POST,request.FILES)
-#         if form.is_valid:
-#             patientcase = form.save(commit=False)
-#             patientcase.patient_name = patient
-#             patientcase.reported_by = hospital
-#             patientcase.save()  
-#             return redirect('patients:patient-detail',pk=patient.pk)
-        
-#     else:
-#         form = PatientCaseForm()
-
-#     return render(request,'patients/patientcase_form.html',{'form':form})   
-    
-
-# class PatientCaseCreate(FormView):
-#     template_name = 'patients/patientcase_form.html'
-#     form_class =  PatientCaseForm 
-#     success_url = 'patients:patient-detail'
     
 class PatientCaseCreate(LoginRequiredMixin,CreateView):
     model = PatientCase

@@ -36,24 +36,11 @@
           {% if perms.patients.change_patient %}
           <a href="{% url 'patients:update-patient' patient.id %}" class="btn btn-warning btn-sm">Update</a>
           {% endif %}
-
-          {% if perms.patients.delete_patient %}
-          <a href="{% url 'patients:delete-patient' patient.id%}" class="btn btn-danger btn-sm">Delete</a>
-          {% endif %}
-
         </td>
 
         <td>
           {% with patient.patientcase_set.all|first as case %}
-          {% if case.is_successful == True and case.is_accepted == True and case.is_approve == True %}
           <span class="badge rounded-pill bg-success">Success</span>
-          {% elif case.is_accepted == True and case.is_approve == True %}
-          <span class="badge rounded-pill bg-warning">Work on it</span>
-          {% elif case.is_accepted == True %}
-          <span class="badge rounded-pill bg-primary">In The system</span>
-          {% else %}
-          <span class="badge bg-danger">Pending</span>
-          {% endif %}
           {% endwith %}
         </td>
       </tr>

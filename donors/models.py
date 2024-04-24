@@ -82,3 +82,16 @@ def set_case_as_approved(sender, instance=None, created=False, **kwargs):
             )
             if devices.exists():
                 devices.send_message(mess)
+            
+@receiver(post_save,sender = PatientCase)
+def notify_donors(sender, instance = None, created = False, **kwargs): 
+    if instance.is_successful:
+        print("hello world")
+        mess = Message(
+        notification=Notification(title="Successful case", 
+                                body="The {} case you donated to has been successful".format(instance.diagnose)),)
+        donor = PatientCase_Donors.objects.filter(patient_case = instance)
+        usernames = [d.donor.username for d in donor]
+        devices = FCMDevice.objects.filter(user__in=usernames)
+        if devices.exists():
+            devices.send_message(mess)

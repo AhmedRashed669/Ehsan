@@ -86,9 +86,13 @@ def notify_admin_case(sender, instance = None, created = False, **kwargs):
         notification=Notification(title="New Case", body="A new case was added by a hospital check it out!",image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'),
         )
         users = User.objects.filter(systememployee__isnull=False)
-        for user in users:
-            device = FCMDevice.objects.filter(user=user)
-            device.send_message(mess)
+        devices = FCMDevice.objects.filter(user__in=users)
+        if devices.exists():
+                devices.send_message(mess)
+
+
+        
+        
 
         
 

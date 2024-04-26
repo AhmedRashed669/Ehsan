@@ -20,7 +20,7 @@ class SpecficDonorGeneralDonationsSerializer(ModelSerializer):
     # pp = serializers.CharField(read_only = True ,default = None)
     class Meta:
         model = GeneralDonations
-        fields = ['amount','donation_date',"pp"]
+        fields = ['amount','donation_date']
 
 class DonationSerializer(ModelSerializer):
     date = serializers.DateTimeField(required = False)

@@ -3,10 +3,12 @@ from rest_framework.viewsets import ModelViewSet
 from .serializer import DonorSerializer,DonationSerializer,GeneralDonationserializer,SpecficDonorGeneralDonationsSerializer,SpecficDonorCaseDonationsSerializer
 from donors.models import Donor,PatientCase_Donors,GeneralDonations
 from django.contrib.auth.models import User
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication,BasicAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.decorators import action
 from django.core.mail import send_mail
+from fcm_django.api.rest_framework import FCMDeviceViewSet
+from fcm_django.models import FCMDevice
 
 class DonorViewSet(ModelViewSet):
     serializer_class = DonorSerializer
@@ -63,6 +65,29 @@ class GeneralDonationViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     http_method_names = ['post']
+
+class CustomFCMDeviceViewSet(FCMDeviceViewSet):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,SessionAuthentication,BasicAuthentication)
+    http_method_names = ['post','delete']
+
+    def create(self, request, *args, **kwargs):
+        # Access the user from the request
+        user = request.user
+
+        # Create a new FCMDevice instance
+        fcm_device = FCMDevice(user=user, **request.data)
+        fcm_device.save()
+
+        # You can add additional logic here if needed
+
+        # Return a response
+        return Response({
+            'message': 'FCM Device created successfully for user: {}'.format(user.username)
+        })
+
+
+
 
 
     

@@ -4,6 +4,13 @@ from donors.models import Donor,PatientCase_Donors,GeneralDonations
 from django.contrib.auth.models import User
 from patients.models import PatientCase
 
+# class WatchLaterSerializer(ModelSerializer):
+#     watch_later = serializers.StringRelatedField(many = True)
+#     class Meta:
+#         model = Donor
+#         fields = ['watch_later']
+
+
 class SimpleCaseSerializer(ModelSerializer):
     class Meta:
         model = PatientCase

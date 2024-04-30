@@ -89,9 +89,15 @@ def notify_donors(sender, instance = None, created = False, **kwargs):
         print("hello world")
         mess = Message(
         notification=Notification(title="Successful case", 
-                                body="The {} case you donated to has been successful".format(instance.diagnose)),)
+                                body="The {} case you donated to has been successfully treated".format(instance.diagnose)),)
         donor = PatientCase_Donors.objects.filter(patient_case = instance)
         usernames = [d.donor.username for d in donor]
         devices = FCMDevice.objects.filter(user__in=usernames)
         if devices.exists():
             devices.send_message(mess)
+
+
+@receiver(post_save,sender = PatientCase)
+def delete_watch_later(sender, instance = None, created = False, **kwargs):
+    if instance.is_approve:
+        instance.watched_by.clear()

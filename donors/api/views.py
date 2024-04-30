@@ -1,7 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from .serializer import DonorSerializer,DonationSerializer,GeneralDonationserializer,SpecficDonorGeneralDonationsSerializer,SpecficDonorCaseDonationsSerializer
+from .serializer import DonorSerializer,DonationSerializer,GeneralDonationserializer,SpecficDonorGeneralDonationsSerializer,SpecficDonorCaseDonationsSerializer,SimpleCaseSerializer
 from donors.models import Donor,PatientCase_Donors,GeneralDonations
+from patients.models import PatientCase
+from patients.api.serializer import PatientCaseSerializer
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication,BasicAuthentication,SessionAuthentication
 from rest_framework.permissions import IsAuthenticated,AllowAny
@@ -9,13 +11,14 @@ from rest_framework.decorators import action
 from django.core.mail import send_mail
 from fcm_django.api.rest_framework import FCMDeviceViewSet
 from fcm_django.models import FCMDevice
+from rest_framework import status
 
 class DonorViewSet(ModelViewSet):
     serializer_class = DonorSerializer
     queryset = Donor.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    http_method_names = ['get','post','patch']
+    http_method_names = ['get','post','patch','delete']
     
     #performs actions before saving to the db
     def perform_create(self, serializer):
@@ -30,6 +33,7 @@ class DonorViewSet(ModelViewSet):
             fail_silently=False,
         )
         serializer.save(username = user)
+
 
     def get_permissions(self):
         if self.action == 'create':
@@ -47,6 +51,25 @@ class DonorViewSet(ModelViewSet):
         donations = PatientCase_Donors.objects.filter(donor = pk)
         serializer =  SpecficDonorCaseDonationsSerializer(donations,many = True)
         return Response(serializer.data)
+    
+    @action(detail=True,methods=['get'])
+    def watch_later_cases(self,request,pk=None):
+        cases = PatientCase.objects.filter(watched_by = pk)
+        serializer = PatientCaseSerializer(cases,many = True)
+        return Response(serializer.data)
+    
+    @action(detail=True,methods=['post'])
+    def remove_watch_later_cases(self,request,pk = None):
+        data = request.data
+        case_id = data['watch_later']
+        if case_id:
+            donor = self.get_object()
+            donor.watch_later.remove(case_id)
+            return Response(status=status.HTTP_202_ACCEPTED)
+
+        
+    
+
         
         
 

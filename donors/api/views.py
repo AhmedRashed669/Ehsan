@@ -18,7 +18,7 @@ class DonorViewSet(ModelViewSet):
     queryset = Donor.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    http_method_names = ['get','post']
+    http_method_names = ['get','post','patch']
     
     #performs actions before saving to the db
     def perform_create(self, serializer):

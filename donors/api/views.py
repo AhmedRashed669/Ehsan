@@ -18,7 +18,7 @@ class DonorViewSet(ModelViewSet):
     queryset = Donor.objects.all()
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    http_method_names = ['get','post','patch','delete']
+    http_method_names = ['get','post']
     
     #performs actions before saving to the db
     def perform_create(self, serializer):
@@ -59,6 +59,16 @@ class DonorViewSet(ModelViewSet):
         return Response(serializer.data)
     
     @action(detail=True,methods=['post'])
+    def add_watch_later(self,request,pk = None):
+        data = request.data
+        case_id = data['watch_later']
+        if case_id:
+            donor = self.get_object()
+            donor.watch_later.add(case_id)
+            return Response(status=status.HTTP_202_ACCEPTED)
+
+    
+    @action(detail=True,methods=['post'])
     def remove_watch_later_cases(self,request,pk = None):
         data = request.data
         case_id = data['watch_later']
@@ -66,12 +76,6 @@ class DonorViewSet(ModelViewSet):
             donor = self.get_object()
             donor.watch_later.remove(case_id)
             return Response(status=status.HTTP_202_ACCEPTED)
-
-        
-    
-
-        
-        
 
     
 class DonationsViewSet(ModelViewSet):

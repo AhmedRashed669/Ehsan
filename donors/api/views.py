@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from fcm_django.api.rest_framework import FCMDeviceViewSet
 from fcm_django.models import FCMDevice
 from rest_framework import status
+from django.db.models import Sum
 
 class DonorViewSet(ModelViewSet):
     serializer_class = DonorSerializer
@@ -85,8 +86,18 @@ class DonationsViewSet(ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     http_method_names = ["post",]
 
+    def create(self, request, *args, **kwargs):
+        amount_donated = request.data.get('amount')
+        case_id = request.data.get('patient_case')
+        total_donation = PatientCase_Donors.objects.filter(patient_case=case_id).aggregate(total=Sum('amount'))['total'] or 0
+        case = PatientCase.objects.get(id = case_id)
+        remaining_cost = int(case.cost) - total_donation
+        if amount_donated > remaining_cost:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        return super().create(request, *args, **kwargs)
 
-class GeneralDonationViewSet(ModelViewSet):
+
+class GeneralDonationViewSet(ModelViewSet): 
     serializer_class = GeneralDonationserializer
     queryset = GeneralDonations.objects.all()
     permission_classes = (IsAuthenticated,)

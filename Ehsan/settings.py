@@ -81,10 +81,10 @@ REST_FRAMEWORK = {
 }
 
 # #Firebase config
-cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
-firebase_admin.initialize_app(cred)
-# cred = credentials.Certificate(r'/home/ehsandonorsys/Ehsan/ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
+# cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
 # firebase_admin.initialize_app(cred)
+cred = credentials.Certificate(r'/home/ehsandonorsys/Ehsan/ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
+firebase_admin.initialize_app(cred)
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",
 }

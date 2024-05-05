@@ -50,7 +50,7 @@ class PatientCase_Donors(models.Model):
 class GeneralDonations(models.Model):
     donor = models.ForeignKey(Donor,on_delete = models.CASCADE)
     amount =  models.BigIntegerField()
-    donation_date = models.DateField(auto_now_add=True)
+    donation_date = models.DateTimeField(default = timezone.now)
 
     def __str__(self) -> str:
         return "{}".format(self.donor).title()

@@ -1,7 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from accounts.models import Hospital,HospitalEmployee
+from accounts.models import Hospital
 from django.urls import reverse,reverse_lazy
 from django.utils import timezone
 from .fcm import send_message
@@ -76,14 +76,14 @@ class PatientCase(models.Model):
                        ("can_succeed_case","Set case as successful"),)
         
         ordering = ["-created_date"]
-    # def get_absolute_url(self):
-    #     return reverse("patients:patient-list")
 
 @receiver(post_save, sender = PatientCase)
 def notify_admin_case(sender, instance = None, created = False, **kwargs):
     if created:
         mess = Message(
-        notification=Notification(title="New Case", body="A new case was added by a hospital check it out!",image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'),
+        notification=Notification(title="New Case", 
+                                  body="A new case was added by a hospital check it out!",
+                                  image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'),
         )
         users = User.objects.filter(systememployee__isnull=False)
         devices = FCMDevice.objects.filter(user__in=users)
@@ -94,13 +94,12 @@ def notify_admin_case(sender, instance = None, created = False, **kwargs):
 @receiver(post_save, sender = PatientCase)
 def notify_hospital_case(sender, instance = None, created = False, **kwargs):
     print("approved")
-    if instance.is_approve:
+    if instance.is_approve and instance.is_successful == False:
         mess = Message(
         notification=Notification(title="{} case is approved".format(instance.diagnose).title(), 
-                                  body="A case has been approved check it out!",
+                                  body="A case has been approved initiate the treatment!",
                                   image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'),
         )
-        # users = User.objects.filter(hospitalemployee_set = instance.reported_by)
         users = User.objects.filter(hospitalemployee__hospital=instance.reported_by)
         devices = FCMDevice.objects.filter(user__in=users)
         if devices.exists():

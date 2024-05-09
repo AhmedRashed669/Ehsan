@@ -18,11 +18,13 @@ from firebase_admin import credentials
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = BASE_DIR / 'templates'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static',
 
-]
-STATIC_ROOT = "/home/ehsandonorsys/Ehsan/static"
+# ]
+# STATIC_ROOT = "/home/ehsandonorsys/Ehsan/static"
+
+STATIC_ROOT = BASE_DIR / 'static'
 
 
 MEDIA_DIR = BASE_DIR / 'media'
@@ -81,10 +83,10 @@ REST_FRAMEWORK = {
 }
 
 # #Firebase config
-# cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
-# firebase_admin.initialize_app(cred)
-cred = credentials.Certificate(r'/home/ehsandonorsys/Ehsan/ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
+cred = credentials.Certificate(r'C:\Users\ahmed\Downloads\ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
 firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(r'/home/ehsandonorsys/Ehsan/ehsan-d211b-firebase-adminsdk-slger-17ca379566.json')  # replace with path to your key file
+# firebase_admin.initialize_app(cred)
 SPECTACULAR_SETTINGS = {
     "TITLE": "Ehsan Donor Managment System",
 }

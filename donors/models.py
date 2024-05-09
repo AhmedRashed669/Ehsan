@@ -31,7 +31,7 @@ class Donor(models.Model):
     watch_later = models.ManyToManyField(PatientCase,
                                          related_name="watched_by",
                                          blank=True)
-    # pic = models.FileField()
+
 
     def __str__(self) -> str:
         return self.full_name.title()
@@ -71,17 +71,7 @@ def set_case_as_approved(sender, instance=None, created=False, **kwargs):
         patientcase = instance.patient_case
         if total_donation >= patientcase.cost:
             patientcase.approve()
-            users = User.objects.filter(hospitalemployee__isnull=False, hospitalemployee__hospital= 4)
-            devices = FCMDevice.objects.filter(user__in=users)
-            mess = Message(
-                notification=Notification(
-                    title="Case approved",
-                    body="case has been approved initiate the treatment",
-                    image='https://img.freepik.com/free-vector/hospital-building-concept-illustration_114360-8250.jpg?w=1060&t=st=1713138548~exp=1713139148~hmac=efcc95fb70d0f61ef4f10874d38994b404cee5d87e085b7c3df334ae2739d0a7'
-                )
-            )
-            if devices.exists():
-                devices.send_message(mess)
+
             
 @receiver(post_save,sender = PatientCase)
 def notify_donors(sender, instance = None, created = False, **kwargs): 
